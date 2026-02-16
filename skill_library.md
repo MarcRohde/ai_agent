@@ -45,7 +45,7 @@ Search this index by **category** or **skill name** to find the right skill, the
 
 | Skill | File | Description |
 |-------|------|-------------|
-| Outlook Mailbox | [skills/outlook_mailbox.md](skills/outlook_mailbox.md) | Read, search, send, reply, and summarize Outlook emails via Microsoft Graph |
+| Outlook Mailbox | [skills/outlook_mailbox.md](skills/outlook_mailbox.md) | Read, search, send, reply, and summarize Outlook emails via Microsoft Graph MCP server |
 
 ---
 

@@ -1,0 +1,36 @@
+{
+  "defaults": {
+    "output_format": "markdown",
+    "verbosity": "detailed",
+    "auto_run_tests": true,
+    "confirm_destructive_actions": true
+  },
+  "skills": {
+    "code_review": {
+      "severity_levels": ["critical", "warning", "suggestion"],
+      "max_file_size_lines": 1000
+    },
+    "generate_tests": {
+      "preferred_frameworks": {
+        "javascript": "jest",
+        "typescript": "jest",
+        "python": "pytest",
+        "csharp": "xunit"
+      },
+      "coverage_goal": "comprehensive"
+    },
+    "git_operations": {
+      "commit_style": "conventional",
+      "branch_prefixes": ["feature", "bugfix", "hotfix", "chore", "docs"],
+      "default_base_branch": "main"
+    },
+    "refactor": {
+      "max_complexity_threshold": 10,
+      "preserve_public_api": true
+    }
+  },
+  "prompts": {
+    "placeholder_syntax": "{{variable}}",
+    "default_system_prompt": "prompts/system/default_system.md"
+  }
+}

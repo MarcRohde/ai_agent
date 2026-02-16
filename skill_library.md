@@ -41,12 +41,6 @@ Search this index by **category** or **skill name** to find the right skill, the
 |-------|------|-------------|
 | Git Operations | [skills/git_operations/skill.md](skills/git_operations/skill.md) | Common git workflows: branching, commits, PR descriptions |
 
-### Productivity & Communication
-
-| Skill | File | Description |
-|-------|------|-------------|
-| Outlook Mailbox | [skills/outlook_mailbox/skill.md](skills/outlook_mailbox/skill.md) | Read, search, send, reply, and summarize Outlook emails via Microsoft Graph MCP server |
-
 ---
 
 ## Adding a New Skill

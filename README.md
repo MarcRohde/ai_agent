@@ -31,8 +31,6 @@ ai_agent/
 │   │   └── skill.md
 │   ├── git_operations/
 │   │   └── skill.md
-│   ├── outlook_mailbox/
-│   │   └── skill.md
 │   └── refactor/
 │       └── skill.md
 ├── prompts/               # Reusable prompt templates
@@ -59,7 +57,6 @@ ai_agent/
 | **Documentation**| Generate docs, READMEs, comments         | `documentation/`                |
 | **Git**          | Branching, commits, PR workflows         | `git_operations/`               |
 | **Explanation**  | Explain code, architecture, patterns     | `explain_code/`                 |
-| **Productivity** | Email, communication workflows           | `outlook_mailbox/`              |
 
 ## Contributing
 

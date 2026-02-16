@@ -16,8 +16,6 @@ skills/
 │   └── skill.md
 ├── git_operations/
 │   └── skill.md
-├── outlook_mailbox/
-│   └── skill.md
 ├── refactor/
 │   └── skill.md
 └── README.md
@@ -42,4 +40,3 @@ skills/
 | `explain_code/` | Explanation | Code explanation |
 | `git_operations/` | Git & Workflow | Git workflows |
 | `documentation/` | Documentation | Doc generation |
-| `outlook_mailbox/` | Productivity | Outlook mailbox access via Microsoft Graph |

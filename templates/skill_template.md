@@ -1,3 +1,4 @@
+<!-- Save this file as: skills/{{skill_name}}/skill.md -->
 # Skill: {{Skill Name}}
 
 ## Description

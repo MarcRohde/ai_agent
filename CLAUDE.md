@@ -8,7 +8,7 @@ This repository is an **AI Skill Library** — a collection of reusable skills, 
 
 | Directory      | Purpose                                                       |
 |----------------|---------------------------------------------------------------|
-| `skills/`      | Individual skill definitions (markdown files with structured instructions) |
+| `skills/`      | Individual skill definitions (each skill in its own `skills/<name>/skill.md` folder) |
 | `prompts/`     | Reusable prompt templates and system prompts                  |
 | `tools/`       | Helper scripts and tool definitions that skills can invoke    |
 | `templates/`   | Scaffolding templates for creating new skills and prompts     |
@@ -17,10 +17,11 @@ This repository is an **AI Skill Library** — a collection of reusable skills, 
 ## Conventions
 
 ### Skill Files
-- Each skill is a standalone `.md` file in `skills/`.
+- Each skill lives in its own folder under `skills/<skill_name>/skill.md`.
+- Folder names use `snake_case` (e.g., `skills/code_review/skill.md`).
 - Skills follow the template in `templates/skill_template.md`.
-- Skill filenames use `snake_case` (e.g., `code_review.md`).
 - Every skill must include: **Name**, **Description**, **Inputs**, **Steps**, and **Output** sections.
+- Additional skill assets (scripts, configs, examples) can be placed alongside `skill.md` in the same folder.
 
 ### Prompt Files
 - System prompts live in `prompts/system/`.
@@ -35,7 +36,7 @@ This repository is an **AI Skill Library** — a collection of reusable skills, 
 
 When a user asks you to perform a task, check `skill_library.md` for a matching skill. If one exists:
 
-1. Read the skill file from `skills/`.
+1. Read the skill file from `skills/<skill_name>/skill.md`.
 2. Follow the **Steps** section exactly.
 3. Use any referenced prompts from `prompts/`.
 4. Invoke any referenced tools from `tools/`.

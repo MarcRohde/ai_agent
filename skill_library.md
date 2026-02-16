@@ -14,43 +14,44 @@ Search this index by **category** or **skill name** to find the right skill, the
 
 | Skill | File | Description |
 |-------|------|-------------|
-| Code Review | [skills/code_review.md](skills/code_review.md) | Perform a structured code review with actionable feedback |
-| Refactor | [skills/refactor.md](skills/refactor.md) | Refactor code for readability, performance, or pattern compliance |
+| Code Review | [skills/code_review/skill.md](skills/code_review/skill.md) | Perform a structured code review with actionable feedback |
+| Refactor | [skills/refactor/skill.md](skills/refactor/skill.md) | Refactor code for readability, performance, or pattern compliance |
 
 ### Testing
 
 | Skill | File | Description |
 |-------|------|-------------|
-| Generate Tests | [skills/generate_tests.md](skills/generate_tests.md) | Generate unit tests for a given file or function |
+| Generate Tests | [skills/generate_tests/skill.md](skills/generate_tests/skill.md) | Generate unit tests for a given file or function |
 
 ### Documentation
 
 | Skill | File | Description |
 |-------|------|-------------|
-| Documentation | [skills/documentation.md](skills/documentation.md) | Generate or update documentation for code, APIs, or projects |
+| Documentation | [skills/documentation/skill.md](skills/documentation/skill.md) | Generate or update documentation for code, APIs, or projects |
 
 ### Explanation
 
 | Skill | File | Description |
 |-------|------|-------------|
-| Explain Code | [skills/explain_code.md](skills/explain_code.md) | Explain what a piece of code does, its patterns, and trade-offs |
+| Explain Code | [skills/explain_code/skill.md](skills/explain_code/skill.md) | Explain what a piece of code does, its patterns, and trade-offs |
 
 ### Git & Workflow
 
 | Skill | File | Description |
 |-------|------|-------------|
-| Git Operations | [skills/git_operations.md](skills/git_operations.md) | Common git workflows: branching, commits, PR descriptions |
+| Git Operations | [skills/git_operations/skill.md](skills/git_operations/skill.md) | Common git workflows: branching, commits, PR descriptions |
 
 ### Productivity & Communication
 
 | Skill | File | Description |
 |-------|------|-------------|
-| Outlook Mailbox | [skills/outlook_mailbox.md](skills/outlook_mailbox.md) | Read, search, send, reply, and summarize Outlook emails via Microsoft Graph MCP server |
+| Outlook Mailbox | [skills/outlook_mailbox/skill.md](skills/outlook_mailbox/skill.md) | Read, search, send, reply, and summarize Outlook emails via Microsoft Graph MCP server |
 
 ---
 
 ## Adding a New Skill
 
-1. Create a new `.md` file in `skills/` using `templates/skill_template.md`.
-2. Add a row to the appropriate category table above.
-3. If a new category is needed, add a new `###` section.
+1. Create a new folder in `skills/` named after the skill (e.g., `skills/my_skill/`).
+2. Add a `skill.md` file inside the folder using `templates/skill_template.md`.
+3. Add a row to the appropriate category table above.
+4. If a new category is needed, add a new `###` section.

@@ -1,11 +1,14 @@
 <#
 .SYNOPSIS
-    Interact with Outlook mailbox via Microsoft Graph PowerShell SDK.
+    Interact with Outlook mailbox via Microsoft Graph REST API.
 
 .DESCRIPTION
     Provides read, search, send, reply, summarize, and list-folders operations
-    against the authenticated user's Outlook mailbox. Requires the Microsoft.Graph
-    module and an active connection (Connect-MgGraph).
+    against the authenticated user's Outlook mailbox. Uses Invoke-MgGraphRequest
+    (from Microsoft.Graph.Authentication) so no sub-modules are required.
+
+    Requires: Install-Module Microsoft.Graph.Authentication -Scope CurrentUser
+    Then:     Connect-MgGraph -Scopes "Mail.Read","Mail.Send","Mail.ReadWrite"
 
 .PARAMETER Operation
     The operation to perform: Read, Search, Send, Reply, Summarize, ListFolders.
@@ -77,81 +80,100 @@ Run:  Connect-MgGraph -Scopes "Mail.Read","Mail.Send","Mail.ReadWrite"
     }
 }
 
-function Get-FolderId {
+function Invoke-Graph {
+    param(
+        [string]$Method = "GET",
+        [string]$Uri,
+        [object]$Body = $null
+    )
+    $params = @{
+        Method = $Method
+        Uri    = $Uri
+    }
+    if ($Body) {
+        $params.Body = ($Body | ConvertTo-Json -Depth 10)
+        $params.ContentType = "application/json"
+    }
+    Invoke-MgGraphRequest @params
+}
+
+function Get-WellKnownFolderPath {
     param([string]$FolderName)
-
-    # Well-known folder names map directly
-    $wellKnown = @{
-        "Inbox"      = "Inbox"
-        "SentItems"  = "SentItems"
-        "Sent Items" = "SentItems"
-        "Drafts"     = "Drafts"
-        "Archive"    = "Archive"
-        "DeletedItems" = "DeletedItems"
+    $map = @{
+        "Inbox"         = "Inbox"
+        "SentItems"     = "SentItems"
+        "Sent Items"    = "SentItems"
+        "Drafts"        = "Drafts"
+        "Archive"       = "Archive"
+        "DeletedItems"  = "DeletedItems"
         "Deleted Items" = "DeletedItems"
-        "JunkEmail"  = "JunkEmail"
-        "Junk"       = "JunkEmail"
+        "JunkEmail"     = "JunkEmail"
+        "Junk"          = "JunkEmail"
     }
-
-    if ($wellKnown.ContainsKey($FolderName)) {
-        return $wellKnown[$FolderName]
-    }
+    if ($map.ContainsKey($FolderName)) { return $map[$FolderName] }
 
     # Try to find by display name
-    $folders = Get-MgUserMailFolder -UserId "me" -Filter "displayName eq '$FolderName'"
-    if ($folders) {
-        return $folders[0].Id
+    $result = Invoke-Graph -Uri "/v1.0/me/mailFolders?`$filter=displayName eq '$FolderName'"
+    if ($result.value -and $result.value.Count -gt 0) {
+        return $result.value[0].id
     }
-
     Write-Warning "Folder '$FolderName' not found. Falling back to Inbox."
     return "Inbox"
 }
 
-function Format-EmailTable {
-    param([array]$Messages)
-
-    $results = @()
-    $i = 1
-    foreach ($msg in $Messages) {
-        $unread = if ($msg.IsRead -eq $false) { [char]0x2709 } else { "" }
-        $results += [PSCustomObject]@{
-            "#"       = $i
-            From      = $msg.From.EmailAddress.Address
-            Subject   = $msg.Subject
-            Date      = $msg.ReceivedDateTime.ToString("yyyy-MM-dd HH:mm")
-            Unread    = $unread
-            MessageId = $msg.Id
-        }
-        $i++
+function Format-MessageRow {
+    param([object]$Msg, [int]$Index)
+    $unread = if ($Msg.isRead -eq $false) { [char]0x2709 } else { "" }
+    $fromAddr = if ($Msg.from -and $Msg.from.emailAddress) { $Msg.from.emailAddress.address } else { "(unknown)" }
+    $date = if ($Msg.receivedDateTime) {
+        ([datetime]$Msg.receivedDateTime).ToString("yyyy-MM-dd HH:mm")
+    } else { "" }
+    [PSCustomObject]@{
+        "#"       = $Index
+        From      = $fromAddr
+        Subject   = $Msg.subject
+        Date      = $date
+        Unread    = $unread
+        MessageId = $Msg.id
     }
-    return $results
 }
 
 # ─── Operations ───────────────────────────────────────────────────────────────
 
 function Invoke-ReadMail {
-    $folderId = Get-FolderId -FolderName $Folder
-    $clampedCount = [Math]::Min($Count, 50)
+    $folderId = Get-WellKnownFolderPath -FolderName $Folder
+    $top = [Math]::Min($Count, 50)
+    $select = "id,subject,from,receivedDateTime,isRead,bodyPreview"
 
-    $messages = Get-MgUserMailFolderMessage -UserId "me" -MailFolderId $folderId `
-        -Top $clampedCount -OrderBy "receivedDateTime desc" `
-        -Property "id,subject,from,receivedDateTime,isRead,bodyPreview"
+    $uri = "/v1.0/me/mailFolders/$folderId/messages?`$top=$top&`$orderby=receivedDateTime desc&`$select=$select"
+    $result = Invoke-Graph -Uri $uri
 
+    $messages = $result.value
     if (-not $messages -or $messages.Count -eq 0) {
         Write-Host "No messages found in $Folder."
         return
     }
 
-    $table = Format-EmailTable -Messages $messages
-    $table | Format-Table "#", From, Subject, Date, Unread -AutoSize | Out-String | Write-Host
+    $i = 1
+    $rows = $messages | ForEach-Object { Format-MessageRow -Msg $_ -Index ($i++); $i++ } | Select-Object -First $top
+    # Rebuild rows cleanly
+    $rows = @()
+    $i = 1
+    foreach ($msg in $messages) {
+        $rows += Format-MessageRow -Msg $msg -Index $i
+        $i++
+    }
+    $rows | Format-Table "#", From, Subject, Date, Unread -AutoSize | Out-String | Write-Host
 
-    # Show preview of the first message
+    # Preview first message
+    $first = $messages[0]
+    $fromAddr = if ($first.from -and $first.from.emailAddress) { $first.from.emailAddress.address } else { "(unknown)" }
     Write-Host "`n--- Preview: Message #1 ---"
-    Write-Host "From:    $($messages[0].From.EmailAddress.Address)"
-    Write-Host "Subject: $($messages[0].Subject)"
-    Write-Host "Date:    $($messages[0].ReceivedDateTime)"
+    Write-Host "From:    $fromAddr"
+    Write-Host "Subject: $($first.subject)"
+    Write-Host "Date:    $($first.receivedDateTime)"
     Write-Host ""
-    Write-Host ($messages[0].BodyPreview | Select-Object -First 1)
+    Write-Host $first.bodyPreview
 }
 
 function Invoke-SearchMail {
@@ -160,22 +182,24 @@ function Invoke-SearchMail {
         exit 1
     }
 
-    $folderId = Get-FolderId -FolderName $Folder
-    $clampedCount = [Math]::Min($Count, 50)
+    $folderId = Get-WellKnownFolderPath -FolderName $Folder
+    $top = [Math]::Min($Count, 50)
+    $select = "id,subject,from,receivedDateTime,isRead,bodyPreview"
+    $searchEncoded = [uri]::EscapeDataString("`"$Query`"")
 
-    # Use $search for full-text search across subject, body, sender
-    $messages = Get-MgUserMailFolderMessage -UserId "me" -MailFolderId $folderId `
-        -Search "`"$Query`"" -Top $clampedCount `
-        -Property "id,subject,from,receivedDateTime,isRead,bodyPreview"
+    $uri = "/v1.0/me/mailFolders/$folderId/messages?`$search=$searchEncoded&`$top=$top&`$select=$select"
+    $result = Invoke-Graph -Uri $uri
 
+    $messages = $result.value
     if (-not $messages -or $messages.Count -eq 0) {
         Write-Host "No messages matching '$Query' in $Folder."
         return
     }
 
     Write-Host "Search results for: '$Query'"
-    $table = Format-EmailTable -Messages $messages
-    $table | Format-Table "#", From, Subject, Date, Unread -AutoSize | Out-String | Write-Host
+    $rows = @(); $i = 1
+    foreach ($msg in $messages) { $rows += Format-MessageRow -Msg $msg -Index $i; $i++ }
+    $rows | Format-Table "#", From, Subject, Date, Unread -AutoSize | Out-String | Write-Host
 }
 
 function Invoke-SendMail {
@@ -183,25 +207,21 @@ function Invoke-SendMail {
     if (-not $Subject) { Write-Error "Send requires -Subject parameter."; exit 1 }
     if (-not $Body) { Write-Error "Send requires -Body parameter."; exit 1 }
 
-    $params = @{
-        Message = @{
-            Subject = $Subject
-            Body = @{
-                ContentType = "Text"
-                Content = $Body
+    $payload = @{
+        message = @{
+            subject = $Subject
+            body = @{
+                contentType = "Text"
+                content = $Body
             }
-            ToRecipients = @(
-                @{
-                    EmailAddress = @{
-                        Address = $To
-                    }
-                }
+            toRecipients = @(
+                @{ emailAddress = @{ address = $To } }
             )
         }
-        SaveToSentItems = $true
+        saveToSentItems = $true
     }
 
-    Send-MgUserMessage -UserId "me" -BodyParameter $params
+    Invoke-Graph -Method POST -Uri "/v1.0/me/sendMail" -Body $payload
     Write-Host "Email sent successfully."
     Write-Host "  To:      $To"
     Write-Host "  Subject: $Subject"
@@ -212,62 +232,51 @@ function Invoke-ReplyMail {
     if (-not $MessageId) { Write-Error "Reply requires -MessageId parameter."; exit 1 }
     if (-not $Body) { Write-Error "Reply requires -Body parameter."; exit 1 }
 
-    $params = @{
-        Message = @{
-            Body = @{
-                ContentType = "Text"
-                Content = $Body
-            }
-        }
-        Comment = $Body
-    }
-
-    # Show original message for context
-    $original = Get-MgUserMessage -UserId "me" -MessageId $MessageId `
-        -Property "subject,from,receivedDateTime,bodyPreview"
+    # Fetch original for context
+    $original = Invoke-Graph -Uri "/v1.0/me/messages/$MessageId`?`$select=subject,from,receivedDateTime,bodyPreview"
+    $fromAddr = if ($original.from -and $original.from.emailAddress) { $original.from.emailAddress.address } else { "(unknown)" }
 
     Write-Host "Replying to:"
-    Write-Host "  From:    $($original.From.EmailAddress.Address)"
-    Write-Host "  Subject: $($original.Subject)"
-    Write-Host "  Date:    $($original.ReceivedDateTime)"
+    Write-Host "  From:    $fromAddr"
+    Write-Host "  Subject: $($original.subject)"
+    Write-Host "  Date:    $($original.receivedDateTime)"
     Write-Host ""
 
-    Invoke-MgReplyUserMessage -UserId "me" -MessageId $MessageId -BodyParameter $params
+    $payload = @{ comment = $Body }
+    Invoke-Graph -Method POST -Uri "/v1.0/me/messages/$MessageId/reply" -Body $payload
     Write-Host "Reply sent successfully."
 }
 
 function Invoke-SummarizeMail {
-    $folderId = Get-FolderId -FolderName $Folder
+    $folderId = Get-WellKnownFolderPath -FolderName $Folder
 
     $filter = switch ($SummaryScope) {
         "today" {
             $todayStart = (Get-Date).Date.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
             "receivedDateTime ge $todayStart"
         }
-        "unread" {
-            "isRead eq false"
-        }
+        "unread" { "isRead eq false" }
         "last-week" {
             $weekAgo = (Get-Date).AddDays(-7).Date.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
             "receivedDateTime ge $weekAgo"
         }
-        default {
-            "isRead eq false"
-        }
+        default { "isRead eq false" }
     }
 
-    $messages = Get-MgUserMailFolderMessage -UserId "me" -MailFolderId $folderId `
-        -Filter $filter -Top 50 -OrderBy "receivedDateTime desc" `
-        -Property "id,subject,from,receivedDateTime,isRead,bodyPreview,importance"
+    $filterEncoded = [uri]::EscapeDataString($filter)
+    $select = "id,subject,from,receivedDateTime,isRead,bodyPreview,importance"
+    $uri = "/v1.0/me/mailFolders/$folderId/messages?`$filter=$filterEncoded&`$top=50&`$orderby=receivedDateTime desc&`$select=$select"
+    $result = Invoke-Graph -Uri $uri
 
+    $messages = $result.value
     if (-not $messages -or $messages.Count -eq 0) {
         Write-Host "No messages found for scope: $SummaryScope"
         return
     }
 
     $total = $messages.Count
-    $unread = ($messages | Where-Object { $_.IsRead -eq $false }).Count
-    $highImportance = ($messages | Where-Object { $_.Importance -eq "High" })
+    $unread = ($messages | Where-Object { $_.isRead -eq $false }).Count
+    $highImportance = @($messages | Where-Object { $_.importance -eq "high" })
 
     Write-Host "=== Email Summary ($SummaryScope) ==="
     Write-Host "Total: $total | Unread: $unread | High importance: $($highImportance.Count)"
@@ -276,60 +285,66 @@ function Invoke-SummarizeMail {
     if ($highImportance.Count -gt 0) {
         Write-Host "--- High Importance ---"
         foreach ($msg in $highImportance) {
-            Write-Host "  ! $($msg.From.EmailAddress.Address) — $($msg.Subject)"
+            $fromAddr = if ($msg.from -and $msg.from.emailAddress) { $msg.from.emailAddress.address } else { "(unknown)" }
+            Write-Host "  ! $fromAddr - $($msg.subject)"
         }
         Write-Host ""
     }
 
     # Group by sender
-    $grouped = $messages | Group-Object { $_.From.EmailAddress.Address }
+    $grouped = $messages | Group-Object { if ($_.from -and $_.from.emailAddress) { $_.from.emailAddress.address } else { "(unknown)" } }
     foreach ($group in ($grouped | Sort-Object Count -Descending)) {
         Write-Host "--- $($group.Name) ($($group.Count) emails) ---"
         foreach ($msg in $group.Group) {
-            $readMark = if ($msg.IsRead -eq $false) { "[UNREAD] " } else { "" }
-            $preview = ($msg.BodyPreview -replace '\s+', ' ').Substring(0, [Math]::Min(100, $msg.BodyPreview.Length))
-            Write-Host "  ${readMark}$($msg.Subject)"
+            $readMark = if ($msg.isRead -eq $false) { "[UNREAD] " } else { "" }
+            $preview = if ($msg.bodyPreview) {
+                ($msg.bodyPreview -replace '\s+', ' ').Substring(0, [Math]::Min(100, $msg.bodyPreview.Length))
+            } else { "" }
+            Write-Host "  ${readMark}$($msg.subject)"
             Write-Host "    $preview..."
         }
         Write-Host ""
     }
 
-    # Output structured JSON for the agent to parse
+    # Structured JSON output for agent parsing
     $summary = @{
         Scope = $SummaryScope
         Total = $total
         Unread = $unread
         HighImportance = $highImportance.Count
-        Messages = $messages | ForEach-Object {
+        Messages = @($messages | ForEach-Object {
             @{
-                Id = $_.Id
-                From = $_.From.EmailAddress.Address
-                Subject = $_.Subject
-                Date = $_.ReceivedDateTime.ToString("yyyy-MM-dd HH:mm")
-                IsRead = $_.IsRead
-                Importance = $_.Importance
-                Preview = $_.BodyPreview
+                Id = $_.id
+                From = if ($_.from -and $_.from.emailAddress) { $_.from.emailAddress.address } else { "(unknown)" }
+                Subject = $_.subject
+                Date = if ($_.receivedDateTime) { ([datetime]$_.receivedDateTime).ToString("yyyy-MM-dd HH:mm") } else { "" }
+                IsRead = $_.isRead
+                Importance = $_.importance
+                Preview = $_.bodyPreview
             }
-        }
+        })
     }
     Write-Host "`n=== JSON ==="
     $summary | ConvertTo-Json -Depth 4
 }
 
 function Invoke-ListFolders {
-    $folders = Get-MgUserMailFolder -UserId "me" -Top 50 `
-        -Property "displayName,totalItemCount,unreadItemCount"
+    $result = Invoke-Graph -Uri "/v1.0/me/mailFolders?`$top=50&`$select=displayName,totalItemCount,unreadItemCount"
 
+    $folders = $result.value
     if (-not $folders -or $folders.Count -eq 0) {
         Write-Host "No mail folders found."
         return
     }
 
-    $folders | Sort-Object -Property TotalItemCount -Descending |
-        Select-Object @{N="Folder";E={$_.DisplayName}},
-                      @{N="Total";E={$_.TotalItemCount}},
-                      @{N="Unread";E={$_.UnreadItemCount}} |
-        Format-Table -AutoSize | Out-String | Write-Host
+    $folders | Sort-Object { $_.totalItemCount } -Descending |
+        ForEach-Object {
+            [PSCustomObject]@{
+                Folder = $_.displayName
+                Total  = $_.totalItemCount
+                Unread = $_.unreadItemCount
+            }
+        } | Format-Table -AutoSize | Out-String | Write-Host
 }
 
 # ─── Main ─────────────────────────────────────────────────────────────────────

@@ -48,6 +48,18 @@ ai_agent/
 5. Optionally add supporting prompts in `prompts/templates/`.
 6. Place any additional skill-specific assets (scripts, configs, examples) alongside `skill.md` in the same folder.
 
+## Skill Precedence
+
+This library is your **general-purpose personal skill library** — the baseline. When the workspace contains multiple folders, skill precedence is applied:
+
+| Priority | Source | Overrides this library? |
+|----------|--------|-------------------------|
+| **Highest** | Project-specific skills (in the active project repo) | Yes — always |
+| **Middle** | Other open workspace libraries | Yes — same-name skills override |
+| **Lowest** | This library (`ai_agent`) | Baseline / fallback |
+
+This ensures project standards and team conventions are always respected. See [AI Agents Overview.md](AI%20Agents%20Overview.md) for detailed resolution rules.
+
 ## Skill Categories
 
 | Category         | Description                              | Examples                        |

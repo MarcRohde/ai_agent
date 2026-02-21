@@ -1,4 +1,33 @@
 {
+  "skill_precedence": {
+    "description": "Defines the priority order for skill resolution when multiple workspace folders contain skills with the same name.",
+    "order": [
+      {
+        "priority": 1,
+        "source": "project",
+        "label": "Project-specific skills",
+        "description": "Skills defined in the active project repository (skills/ or .ai/skills/). Always highest priority."
+      },
+      {
+        "priority": 2,
+        "source": "workspace_library",
+        "label": "Other open workspace libraries",
+        "description": "Skills from other non-ai_agent repositories open in the workspace. Override the personal library."
+      },
+      {
+        "priority": 3,
+        "source": "ai_agent",
+        "label": "This library (ai_agent)",
+        "description": "General-purpose personal skill library. Used as fallback when no higher-priority source provides the skill."
+      }
+    ],
+    "skill_paths": [
+      "skills/{skill_name}/skill.md",
+      ".ai/skills/{skill_name}/skill.md"
+    ],
+    "override_behavior": "full_replace",
+    "note": "When a higher-priority source defines a same-named skill, it fully replaces the lower-priority version. Skills unique to this library remain available regardless."
+  },
   "defaults": {
     "output_format": "markdown",
     "verbosity": "detailed",

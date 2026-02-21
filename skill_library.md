@@ -6,6 +6,8 @@
 
 Search this index by **category** or **skill name** to find the right skill, then read the linked skill file for full instructions.
 
+> **Precedence Note:** This library is the **general-purpose default**. If another open workspace folder (e.g., a project repo or team library) defines a skill with the **same name**, that version takes priority. Project-specific skills always override this library, and other open libraries override it as well. See `AI Agents Overview.md § Skill Resolution & Precedence` for the full rules.
+
 ---
 
 ## Skills

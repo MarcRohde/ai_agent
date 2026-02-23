@@ -21,6 +21,8 @@ ai_agent/
 ├── README.md              # This file
 ├── skill_library.md       # Master index of all skills
 ├── skills/                # Individual skill definitions
+│   ├── andis_bi_sql_change/
+│   │   └── skill.md
 │   ├── code_review/
 │   │   └── skill.md
 │   ├── documentation/
@@ -69,6 +71,7 @@ This ensures project standards and team conventions are always respected. See [A
 | **Documentation**| Generate docs, READMEs, comments         | `documentation/`                |
 | **Git**          | Branching, commits, PR workflows         | `git_operations/`               |
 | **Explanation**  | Explain code, architecture, patterns     | `explain_code/`                 |
+| **Andis BI Data Engineering** | BI SQL change planning/execution with guardrails | `andis_bi_sql_change/` |
 
 ## Contributing
 

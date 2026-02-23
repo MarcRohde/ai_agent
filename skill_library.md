@@ -43,6 +43,12 @@ Search this index by **category** or **skill name** to find the right skill, the
 |-------|------|-------------|
 | Git Operations | [skills/git_operations/skill.md](skills/git_operations/skill.md) | Common git workflows: branching, commits, PR descriptions |
 
+### Andis BI Data Engineering
+
+| Skill | File | Description |
+|-------|------|-------------|
+| Andis BI SQL Change | [skills/andis_bi_sql_change/skill.md](skills/andis_bi_sql_change/skill.md) | Plan and execute SQL changes for Andis BI environments with guardrails, validation, and rollback |
+
 ---
 
 ## Adding a New Skill

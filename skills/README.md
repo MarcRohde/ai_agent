@@ -6,6 +6,8 @@ This directory contains individual skill definitions. Each skill is organized in
 
 ```
 skills/
+├── andis_bi_sql_change/
+│   └── skill.md
 ├── code_review/
 │   └── skill.md
 ├── documentation/
@@ -40,3 +42,4 @@ skills/
 | `explain_code/` | Explanation | Code explanation |
 | `git_operations/` | Git & Workflow | Git workflows |
 | `documentation/` | Documentation | Doc generation |
+| `andis_bi_sql_change/` | Andis BI Data Engineering | BI-specific SQL change planning and execution |

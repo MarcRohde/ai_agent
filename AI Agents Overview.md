@@ -12,6 +12,7 @@ This repository is an **AI Skill Library** — a collection of reusable skills, 
 | `tools/`       | Helper scripts and tool definitions that skills can invoke    |
 | `templates/`   | Scaffolding templates for creating new skills and prompts     |
 | `config/`      | Configuration files for skill behavior and defaults           |
+| `learnings/`   | Post-project reflections, skill recommendations, and lessons learned |
 
 ## Conventions
 
@@ -85,6 +86,17 @@ If no matching skill exists in any open workspace folder, offer to create one us
 - Markdown files: ATX headings (`#`), fenced code blocks with language tags.
 - Scripts: Include error handling, comments, and a usage header.
 - JSON config: 2-space indentation, no trailing commas.
+
+## Capturing Learnings
+
+After completing significant development tasks (3+ hours of work), create a learning document in `learnings/` to capture:
+- New skills that should be added based on gaps encountered
+- Tool recommendations and enhancements
+- Patterns that worked well or caused friction
+- Time savings estimates and quality improvements
+- References to documentation that was helpful
+
+See `learnings/README.md` for the template and naming conventions. Use format: `{type}-{YYYY-MM-DD}.md` (e.g., `recommendations-2026-03-02.md`).
 
 ## Important Notes
 - Always read `skill_library.md` first when looking for available skills.

@@ -23,7 +23,11 @@ ai_agent/
 ├── skills/                # Individual skill definitions
 │   ├── andis_bi_sql_change/
 │   │   └── skill.md
+│   ├── api_resilience/
+│   │   └── skill.md
 │   ├── code_review/
+│   │   └── skill.md
+│   ├── dev_environment_bootstrap/
 │   │   └── skill.md
 │   ├── documentation/
 │   │   └── skill.md
@@ -33,12 +37,17 @@ ai_agent/
 │   │   └── skill.md
 │   ├── git_operations/
 │   │   └── skill.md
+│   ├── oauth2_integration/
+│   │   └── skill.md
+│   ├── powershell_best_practices/
+│   │   └── skill.md
 │   └── refactor/
 │       └── skill.md
 ├── prompts/               # Reusable prompt templates
 ├── tools/                 # Helper scripts and utilities
 ├── templates/             # Templates for creating new skills/prompts
-└── config/                # Configuration and defaults
+├── config/                # Configuration and defaults
+└── learnings/             # Post-project reflections and recommendations
 ```
 
 ## Creating a New Skill
@@ -79,6 +88,7 @@ This ensures project standards and team conventions are always respected. See [A
 2. Keep skills focused — one task per skill.
 3. Test your skill by invoking it from VS Code chat.
 4. Update `skill_library.md` with the new entry.
+5. After completing projects, document learnings in `learnings/` with recommendations for new skills or tool improvements.
 
 ## License
 

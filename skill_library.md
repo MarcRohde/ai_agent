@@ -43,6 +43,25 @@ Search this index by **category** or **skill name** to find the right skill, the
 |-------|------|-------------|
 | Git Operations | [skills/git_operations/skill.md](skills/git_operations/skill.md) | Common git workflows: branching, commits, PR descriptions |
 
+### API Integration
+
+| Skill | File | Description |
+|-------|------|-------------|
+| OAuth2 Integration | [skills/oauth2_integration/skill.md](skills/oauth2_integration/skill.md) | Implement OAuth2 authentication flows with token management and refresh |
+| API Resilience & Throttling | [skills/api_resilience/skill.md](skills/api_resilience/skill.md) | Build robust API calls with retry logic, backoff, and rate limit handling |
+
+### Scripting & Automation
+
+| Skill | File | Description |
+|-------|------|-------------|
+| PowerShell Best Practices | [skills/powershell_best_practices/skill.md](skills/powershell_best_practices/skill.md) | Develop production-quality PowerShell scripts with proper error handling and documentation |
+
+### DevOps & Environment
+
+| Skill | File | Description |
+|-------|------|-------------|
+| Dev Environment Bootstrap | [skills/dev_environment_bootstrap/skill.md](skills/dev_environment_bootstrap/skill.md) | Create portable bootstrap scripts for consistent development environment setup |
+
 ### Andis BI Data Engineering
 
 | Skill | File | Description |

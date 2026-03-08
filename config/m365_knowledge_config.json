@@ -1,0 +1,81 @@
+{
+    "version": "1.0",
+    "knowledge_strategy": {
+        "graph_first": true,
+        "filesystem_fallback": true,
+        "require_citations": true,
+        "max_results": 10
+    },
+    "authentication": {
+        "tenant_id_env": "EXO_TENANT_ID",
+        "client_id_env": "EXO_CLIENT_ID",
+        "access_token_env": "M365_GRAPH_ACCESS_TOKEN",
+        "token_source_order": [
+            "env",
+            "azure_cli",
+            "azure_cli_browser_login",
+            "device_code"
+        ]
+    },
+    "graph": {
+        "search_endpoint": "https://graph.microsoft.com/v1.0/search/query",
+        "default_entity_types": [
+            "driveItem",
+            "listItem",
+            "site"
+        ],
+        "optional_entity_types": [
+            "message",
+            "event",
+            "chatMessage",
+            "externalItem"
+        ],
+        "default_scope": "all",
+        "scopes": {
+            "all": [
+                "driveItem",
+                "listItem",
+                "site"
+            ],
+            "work": [
+                "driveItem",
+                "listItem",
+                "site"
+            ],
+            "personal": [
+                "driveItem"
+            ],
+            "mail": [
+                "message"
+            ],
+            "chat": [
+                "chatMessage"
+            ],
+            "communications": [
+                "message",
+                "chatMessage"
+            ]
+        }
+    },
+    "workiq": {
+        "enabled": true,
+        "description": "Use Microsoft Search connectors and external items through Graph search when available.",
+        "entity_type": "externalItem",
+        "connector_ids": []
+    },
+    "security": {
+        "blocked_extensions": [
+            ".pfx",
+            ".key",
+            ".pem",
+            ".kdbx",
+            ".env"
+        ],
+        "blocked_path_contains": [
+            "Passwords",
+            "Secrets",
+            "Private"
+        ],
+        "strip_pii_in_summaries": false
+    }
+}

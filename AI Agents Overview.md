@@ -30,6 +30,7 @@ This repository is an **AI Skill Library** — a collection of reusable skills, 
 
 ### Tools / Scripts
 - Executable scripts live in `tools/scripts/`.
+- Microsoft 365 and Exchange-adjacent scripts are grouped under `tools/scripts/M365/`.
 - Each script has a companion README or header comment describing its usage.
 
 ## Skill Resolution & Precedence

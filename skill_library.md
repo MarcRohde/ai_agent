@@ -50,6 +50,12 @@ Search this index by **category** or **skill name** to find the right skill, the
 | OAuth2 Integration | [skills/oauth2_integration/skill.md](skills/oauth2_integration/skill.md) | Implement OAuth2 authentication flows with token management and refresh |
 | API Resilience & Throttling | [skills/api_resilience/skill.md](skills/api_resilience/skill.md) | Build robust API calls with retry logic, backoff, and rate limit handling |
 
+### Knowledge Retrieval
+
+| Skill | File | Description |
+|-------|------|-------------|
+| M365 Graph Knowledge | [skills/m365_graph_knowledge/skill.md](skills/m365_graph_knowledge/skill.md) | Retrieve grounded answers from Microsoft 365 (including non-synced SharePoint/OneDrive content) using Graph search and connector-backed external items |
+
 ### Scripting & Automation
 
 | Skill | File | Description |

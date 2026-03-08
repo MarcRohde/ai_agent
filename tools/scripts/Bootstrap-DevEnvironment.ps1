@@ -19,6 +19,9 @@
 .PARAMETER Validate
     Validate environment after setting variables (default: true).
 
+.PARAMETER SkipToolInstall
+    Skip automatic installation of MCP tools (e.g., @playwright/mcp).
+
 .EXAMPLE
     .\Bootstrap-DevEnvironment.ps1 -Variables @{
         TENANT_ID='7d2c093d-4c2f-41e8-b222-0039fd152112'
@@ -47,7 +50,10 @@ param(
     [switch]$DoNotUpdateCurrentSession,
 
     [Parameter(Mandatory = $false)]
-    [switch]$SkipValidation
+    [switch]$SkipValidation,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$SkipToolInstall
 )
 
 Set-StrictMode -Version Latest
@@ -90,6 +96,33 @@ function Set-EnvironmentVariable {
     }
 }
 
+function Install-PlaywrightMcp {
+    Write-Host "`nChecking Playwright MCP..." -ForegroundColor Cyan
+
+    # Verify npm is available
+    if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
+        Write-Host "  npm not found. Skipping Playwright MCP install (install Node.js to enable)." -ForegroundColor Yellow
+        return
+    }
+
+    # Check if @playwright/mcp is already installed globally
+    $installed = npm list -g --depth=0 2>$null | Select-String '@playwright/mcp'
+    if ($installed) {
+        Write-Host "  @playwright/mcp already installed." -ForegroundColor Green
+        return
+    }
+
+    Write-Host "  Installing @playwright/mcp globally..." -NoNewline
+    try {
+        npm install -g @playwright/mcp 2>&1 | Out-Null
+        Write-Host " OK" -ForegroundColor Green
+    }
+    catch {
+        Write-Host " FAILED" -ForegroundColor Red
+        Write-Warning "Could not install @playwright/mcp: $_"
+    }
+}
+
 # Pre-flight checks
 Write-Host "Dev Environment Bootstrap" -ForegroundColor Cyan
 Write-Host ("=" * 50)
@@ -97,6 +130,11 @@ Write-Host ("=" * 50)
 if ($PersistScope -eq 'Machine' -and -not (Test-IsAdmin)) {
     Write-Error "Machine scope requires Administrator privileges. Re-run PowerShell as Administrator or use '-PersistScope User'."
     exit 1
+}
+
+# Install required MCP tools
+if (-not $SkipToolInstall) {
+    Install-PlaywrightMcp
 }
 
 if ($Variables.Count -eq 0) {

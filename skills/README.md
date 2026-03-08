@@ -8,6 +8,8 @@ This directory contains individual skill definitions. Each skill is organized in
 skills/
 ├── andis_bi_sql_change/
 │   └── skill.md
+├── andis_bi_semantic_view_change/
+│   └── skill.md
 ├── code_review/
 │   └── skill.md
 ├── documentation/
@@ -17,6 +19,14 @@ skills/
 ├── generate_tests/
 │   └── skill.md
 ├── git_operations/
+│   └── skill.md
+├── m365_graph_knowledge/
+│   └── skill.md
+├── oauth2_integration/
+│   └── skill.md
+├── powershell_best_practices/
+│   └── skill.md
+├── api_resilience/
 │   └── skill.md
 ├── refactor/
 │   └── skill.md
@@ -43,3 +53,8 @@ skills/
 | `git_operations/` | Git & Workflow | Git workflows |
 | `documentation/` | Documentation | Doc generation |
 | `andis_bi_sql_change/` | Andis BI Data Engineering | BI-specific SQL change planning and execution |
+| `andis_bi_semantic_view_change/` | Andis BI Data Engineering | BI semantic view updates with join/grain validation |
+| `m365_graph_knowledge/` | Knowledge Retrieval | Microsoft 365 Graph search for synced and non-synced enterprise content |
+| `oauth2_integration/` | API Integration | OAuth2 token acquisition and refresh patterns |
+| `api_resilience/` | API Integration | Retry, backoff, and throttling-safe API execution |
+| `powershell_best_practices/` | Scripting & Automation | Production-ready PowerShell patterns |

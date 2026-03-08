@@ -37,6 +37,8 @@ ai_agent/
 │   │   └── skill.md
 │   ├── git_operations/
 │   │   └── skill.md
+│   ├── m365_graph_knowledge/
+│   │   └── skill.md
 │   ├── oauth2_integration/
 │   │   └── skill.md
 │   ├── powershell_best_practices/
@@ -80,6 +82,7 @@ This ensures project standards and team conventions are always respected. See [A
 | **Documentation**| Generate docs, READMEs, comments         | `documentation/`                |
 | **Git**          | Branching, commits, PR workflows         | `git_operations/`               |
 | **Explanation**  | Explain code, architecture, patterns     | `explain_code/`                 |
+| **Knowledge Retrieval** | Microsoft 365 and enterprise knowledge retrieval with citations | `m365_graph_knowledge/` |
 | **Andis BI Data Engineering** | BI SQL change planning/execution with guardrails | `andis_bi_sql_change/` |
 
 ## Contributing

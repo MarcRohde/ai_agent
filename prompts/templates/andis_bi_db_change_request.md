@@ -23,15 +23,30 @@ You are handling an Andis BI SQL change request.
 - Production Approval: {{production_approval}}
 - Pattern to Mirror: {{pattern_to_mirror}}
 - Change Window / Timing: {{change_window}}
+- Grain Key (semantic layer): {{grain_key}}
+- Bridge Path (if joined lookup): {{bridge_path}}
+- Bridge Determinism Proof: {{bridge_determinism_proof}}
+- Backfill Required: {{backfill_required}}
+- Backfill SQL: {{backfill_sql}}
+- Pre-Deploy Baseline Queries: {{pre_deploy_baseline_queries}}
+- Post-Deploy Validation Queries: {{post_deploy_validation_queries}}
+- Rollback Script Path: {{rollback_script_path}}
 
 ## Required Approach
 1. Confirm Andis BI scope and environment.
 2. If target is BI-PROD, do not execute without explicit production approval.
 3. Discover current object definitions and dependency chain.
-4. Build an ordered plan (stage -> lookup -> fact/dim -> orchestration).
-5. Implement only what is required by request.
-6. Run validation queries and report exact results.
-7. Provide rollback steps for each modified object.
+4. Capture baseline row/grain metrics before changes.
+5. For `ods.dim*` changes, enforce semantic layer join gate:
+	- define `grain_key`
+	- prove deterministic `bridge_path`
+	- run duplicate/fanout checks
+6. Build an ordered plan (stage -> lookup -> fact/dim -> orchestration).
+7. Implement only what is required by request.
+8. If incremental ETL pattern implies historical rows are missed, include one-time backfill.
+9. Run validation queries and report exact expected vs actual results.
+10. Provide rollback steps and rollback script path for each modified object.
+11. For BI-PROD, include explicit deployment evidence (column present, grain parity, mismatch count).
 
 ## Required Output Format
 
@@ -40,6 +55,12 @@ You are handling an Andis BI SQL change request.
 - Databases:
 - In scope:
 - Out of scope:
+
+### Join and Grain Gate
+- Grain key:
+- Bridge path:
+- Determinism proof status:
+- Best-effort approved (if needed):
 
 ### Implementation Plan
 1. ...
@@ -57,9 +78,20 @@ You are handling an Andis BI SQL change request.
 - Actual:
 - Status:
 
+### Backfill Results (if applicable)
+- Backfill SQL/Step:
+- Rows updated:
+- Residual mismatch count:
+
 ### Rollback Plan
 - Object:
 - Rollback SQL/Step:
+- Rollback script path:
+
+### Production Evidence (if BI-PROD)
+- Column exists:
+- Row/grain parity:
+- Mismatch count:
 
 ### Final Status
 - Completed / Blocked
@@ -78,3 +110,11 @@ You are handling an Andis BI SQL change request.
 | `{{production_approval}}` | Explicit production approval text if BI-PROD |
 | `{{pattern_to_mirror}}` | Existing ETL/modeling pattern to follow |
 | `{{change_window}}` | Planned execution timing/window |
+| `{{grain_key}}` | Grain key for semantic-layer changes (`ods.dim*`) |
+| `{{bridge_path}}` | Join path used to source new field |
+| `{{bridge_determinism_proof}}` | Summary of duplicate/fanout checks |
+| `{{backfill_required}}` | Whether one-time historical backfill is required |
+| `{{backfill_sql}}` | Backfill SQL statement/procedure call |
+| `{{pre_deploy_baseline_queries}}` | Baseline query pack before deployment |
+| `{{post_deploy_validation_queries}}` | Validation query pack after deployment |
+| `{{rollback_script_path}}` | Path to rollback script |

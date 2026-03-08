@@ -67,6 +67,7 @@ Search this index by **category** or **skill name** to find the right skill, the
 | Skill | File | Description |
 |-------|------|-------------|
 | Andis BI SQL Change | [skills/andis_bi_sql_change/skill.md](skills/andis_bi_sql_change/skill.md) | Plan and execute SQL changes for Andis BI environments with guardrails, validation, and rollback |
+| Andis BI Semantic View Change | [skills/andis_bi_semantic_view_change/skill.md](skills/andis_bi_semantic_view_change/skill.md) | Update `ods.dim*` views with join determinism checks, grain protection, and semantic validation |
 
 ---
 

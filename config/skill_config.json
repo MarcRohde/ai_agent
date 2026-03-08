@@ -56,6 +56,11 @@
     "refactor": {
       "max_complexity_threshold": 10,
       "preserve_public_api": true
+    },
+    "azure_devops_work_item": {
+      "default_project": "Dynamics ERP",
+      "set_tags_by_default": false,
+      "require_project_confirmation_when_inferred": true
     }
   },
   "prompts": {

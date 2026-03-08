@@ -68,6 +68,12 @@ Search this index by **category** or **skill name** to find the right skill, the
 |-------|------|-------------|
 | Dev Environment Bootstrap | [skills/dev_environment_bootstrap/skill.md](skills/dev_environment_bootstrap/skill.md) | Create portable bootstrap scripts for consistent development environment setup |
 
+### Project Management
+
+| Skill | File | Description |
+|-------|------|-------------|
+| Azure DevOps Work Item Creation | [skills/azure_devops_work_item/skill.md](skills/azure_devops_work_item/skill.md) | Create Azure DevOps work items with intelligent project inference, comprehensive descriptions, and attachment handling |
+
 ### Andis BI Data Engineering
 
 | Skill | File | Description |

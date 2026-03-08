@@ -10,6 +10,8 @@ skills/
 │   └── skill.md
 ├── andis_bi_semantic_view_change/
 │   └── skill.md
+├── azure_devops_work_item/
+│   └── skill.md
 ├── code_review/
 │   └── skill.md
 ├── documentation/
@@ -58,3 +60,4 @@ skills/
 | `oauth2_integration/` | API Integration | OAuth2 token acquisition and refresh patterns |
 | `api_resilience/` | API Integration | Retry, backoff, and throttling-safe API execution |
 | `powershell_best_practices/` | Scripting & Automation | Production-ready PowerShell patterns |
+| `azure_devops_work_item/` | Project Management | Azure DevOps work item creation with intelligent project inference |

@@ -90,7 +90,7 @@
 - Longest open item: 316 days (Matthew Schmidt - Termination workflow)
 - Matthew Schmidt has highest volume (14 items) but moderate age (84.5 days avg)
 
-**Script Location:** `work-projects/scripts/analyze_helpdesk_items.py`
+**Script Location:** `tools/scripts/AzureDevOps/Analyze-HelpDeskItems.py`
 
 ### Analysis Script Features
 - Filters by work item type explicitly

@@ -41,8 +41,13 @@ When analyzing "Help Desk" work items:
 - **Filter by Type:** Use `system.workitemtype = 'Help Desk'` to get actual Help Desk work items
 - **Content vs Type:** Search results may include other work item types that mention "help desk" in descriptions
 - **Example:** A search for "help desk" may return 133 results, but only 52 might be actual Help Desk work items
-- **Script Location:** Use `work-projects/scripts/analyze_helpdesk_items.py` for detailed analysis by assignee
+- **Script Location:** Use `tools/scripts/AzureDevOps/Analyze-HelpDeskItems.py` for detailed analysis by assignee
 - **Key Metrics:** Average days open, count by assignee, longest open items
+
+**Script Usage:**
+```powershell
+python tools/scripts/AzureDevOps/Analyze-HelpDeskItems.py <json_file_path> [analysis_date]
+```
 
 ## Inputs
 

@@ -105,7 +105,12 @@ Time Period: Last 30 days
 
 ## Related Scripts
 
-- `work-projects/scripts/analyze_helpdesk_items.py` - Help Desk work item analysis by assignee
+- `tools/scripts/AzureDevOps/Analyze-HelpDeskItems.py` - Help Desk work item analysis by assignee
+
+**Usage:**
+```powershell
+python tools/scripts/AzureDevOps/Analyze-HelpDeskItems.py <json_file_path> [analysis_date]
+```
 
 ## Notes
 

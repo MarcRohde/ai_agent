@@ -8,6 +8,8 @@ This directory contains helper scripts and tool definitions that skills can invo
 tools/
 ├── README.md
 └── scripts/          # Executable scripts
+    ├── AzureDevOps/
+    │   └── Analyze-HelpDeskItems.py
     ├── M365/
     │   ├── Get-ArchiveMessages.ps1
     │   ├── Get-M365GraphAccessToken.ps1
@@ -28,6 +30,7 @@ tools/
 
 | Script | Purpose |
 |--------|---------|
+| `scripts/AzureDevOps/Analyze-HelpDeskItems.py` | Analyze Azure DevOps Help Desk work items by assignee, calculating average days open and identifying longest open items |
 | `scripts/M365/Get-M365GraphAccessToken.ps1` | Resolve a Microsoft Graph token from env, Azure CLI, automatic browser `az login`, or device code flow |
 | `scripts/M365/Search-M365Knowledge.ps1` | Query Microsoft Graph search for knowledge retrieval with citation-ready output and automatic Azure CLI browser sign-in fallback |
 | `scripts/M365/Get-ArchiveMessages.ps1` | Retrieve the most recent Archive emails from Microsoft Graph using cached token context |

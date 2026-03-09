@@ -11,7 +11,8 @@ prompts/
 └── templates/        # Task-specific prompt templates
     ├── andis_bi_db_change_request.md
     ├── bug_fix.md
-    └── feature_request.md
+    ├── feature_request.md
+    └── work_item_analysis.md
 ```
 
 ## Conventions

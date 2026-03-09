@@ -62,6 +62,63 @@
 
 ---
 
+# Azure DevOps Help Desk Analysis Lessons
+
+**Date:** 2026-03-08
+**Context:** Work item type filtering and analysis script creation
+**Status:** ✅ Complete - Script saved and documented
+
+---
+
+## Lessons Learned
+
+### Work Item Type vs Content Search
+
+**Problem:**
+- Initial search for "help desk" returned 133 work items across multiple types (User Story, Task, Feature, Help Desk)
+- Only 52 of these were actual "Help Desk" work item types
+- Other work items simply mentioned "help desk" in descriptions or comments
+
+**Solution:**
+- Filter search results by `system.workitemtype = 'Help Desk'` to get precise results
+- Created Python analysis script that filters explicitly by work item type
+- Script calculates average days open by assignee for Help Desk items only
+
+**Key Findings:**
+- 52 open Help Desk work items across 8 assignees
+- Average days open ranges from 4.3 days (unassigned) to 94.4 days (Paul Lawson)
+- Longest open item: 316 days (Matthew Schmidt - Termination workflow)
+- Matthew Schmidt has highest volume (14 items) but moderate age (84.5 days avg)
+
+**Script Location:** `work-projects/scripts/analyze_helpdesk_items.py`
+
+### Analysis Script Features
+- Filters by work item type explicitly
+- Calculates average days open per assignee
+- Shows total days and item count per assignee
+- Lists top 10 longest open Help Desk items
+- Handles timezone-aware vs naive datetime comparisons
+- Reads from Azure DevOps MCP tool JSON output
+
+**Pattern Established:**
+```python
+# ✅ Filter by work item type
+if work_item_type != 'Help Desk':
+    continue
+
+# ❌ Don't rely on content search alone
+# Search results may include other types that mention "help desk"
+```
+
+**Action Items:**
+- Updated Azure DevOps skill with Help Desk analysis guidelines
+- Documented script location and usage pattern
+- Added work item type filtering to cost-optimization guidelines
+
+---
+
+---
+
 # BI-DEV WarehouseID Deployment Lessons and Recommendations
 
 **Date:** 2026-03-08

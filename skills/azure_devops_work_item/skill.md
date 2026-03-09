@@ -3,10 +3,46 @@
 ## Description
 Create Azure DevOps work items with intelligent project inference, comprehensive descriptions, and proper attachment handling. Ensures work items are created in the correct project based on context and includes all necessary documentation.
 
+## Complexity & Routing
+
+### Task Complexity
+- **Simple (Low Cost):** Query work items by assignee name, list open items, retrieve work item details, search by keywords
+- **Moderate:** Create work items with standard fields, update existing items, link related items
+- **Complex (Consider Escalation):** Bulk work item operations, complex field mappings, cross-project migrations, custom workflow automation
+
+### Cost-Optimization Guidelines
+- **Efficient Tools:** Use `mcp_microsoft_azu_search_workitem` for assignee queries (3-5x faster, 60-80% less data)
+- **Avoid Inefficient Patterns:** Don't use backlog queries when search API with filters is available
+- **Batch Operations:** Use `get_work_items_batch_by_ids` only when full field details are needed
+- **Name Resolution:** Leverage assignee lookup table to avoid repeated identity searches
+- **Work Item Type Filtering:** When analyzing specific work item types (e.g., "Help Desk"), filter by `system.workitemtype` field, not just content search
+
+### When to Use This Skill Directly
+✅ Creating/updating individual work items
+✅ Querying work items by assignee (use efficient search method)
+✅ Searching work items with filters (state, type, keywords)
+✅ Retrieving work item details for user review
+
+### When to Escalate to Complex Agent
+❌ Bulk operations (>50 work items)
+❌ Complex workflow customization requiring Azure DevOps REST API
+❌ Cross-project work item migrations
+❌ Custom field mappings or advanced queries requiring multiple API calls
+
 ## Scope
 - Applies to: All Andis Azure DevOps projects
 - Contexts: BI deployments, SQL changes, application features, infrastructure changes, ERP customizations, web development
-- Work Item Types: Task, Bug, User Story, Epic, Feature
+- Work Item Types: Task, Bug, User Story, Epic, Feature, Help Desk
+
+## Analysis Guidelines
+
+### Help Desk Work Item Analysis
+When analyzing "Help Desk" work items:
+- **Filter by Type:** Use `system.workitemtype = 'Help Desk'` to get actual Help Desk work items
+- **Content vs Type:** Search results may include other work item types that mention "help desk" in descriptions
+- **Example:** A search for "help desk" may return 133 results, but only 52 might be actual Help Desk work items
+- **Script Location:** Use `work-projects/scripts/analyze_helpdesk_items.py` for detailed analysis by assignee
+- **Key Metrics:** Average days open, count by assignee, longest open items
 
 ## Inputs
 
@@ -111,14 +147,27 @@ If no clear inference can be made, use **Dynamics ERP** as the default project a
    | `iteration_path` | `System.IterationPath` | Path string |
    | `area_path` | `System.AreaPath` | Path string |
 
-### 4. **Format Description as HTML**
+### 4. **Resolve Assignee Identity Cross-Reference Fields**
+   Normalize assignee identity into reusable fields for downstream matching/reporting:
+
+   - Preferred source (object form): `System.AssignedTo.displayName`, `System.AssignedTo.uniqueName`
+   - Fallback source (string form): `System.AssignedTo = "Display Name <email@domain>"`
+
+   Normalization rules:
+   1. `assignee_email`: use `uniqueName` when object form exists; otherwise parse text between `<` and `>`.
+   2. `assignee_display_name`: use `displayName` when object form exists; otherwise parse text before `<`.
+   3. `assignee_first_name` and `assignee_last_name`:
+      - If display name contains a comma (for example `Last, First`), split on comma and map accordingly.
+      - Else split on whitespace and use first token as first name and last token as last name.
+
+### 5. **Format Description as HTML**
    - Convert markdown to HTML for `System.Description` field
    - Use proper HTML tags: `<h2>`, `<h3>`, `<p>`, `<ul>`, `<li>`, `<code>`, `<pre>`, `<hr>`
    - Preserve code blocks with `<pre><code>` tags
    - Use `<strong>` and `<em>` for emphasis
    - Convert checkboxes: `- [ ]` → `☐` or `<input type="checkbox">`
 
-### 5. **Prepare Attachments**
+### 6. **Prepare Attachments**
    For SQL deployments or code changes:
    - Attach all production scripts in execution order
    - Include README/deployment guide files
@@ -127,12 +176,12 @@ If no clear inference can be made, use **Dynamics ERP** as the default project a
 
    Note: Use absolute Windows paths with double backslashes or single forward slashes
 
-### 6. **Create Work Item**
+### 7. **Create Work Item**
    - Call `mcp_microsoft_azu_wit_create_work_item` with prepared fields
    - Capture work item ID and URL from response
    - Log creation confirmation
 
-### 7. **Post-Creation Actions**
+### 8. **Post-Creation Actions**
    - Display work item URL for immediate access
    - List any attachments that need manual upload (if tool limitations exist)
    - Provide next steps (e.g., "Assign to reviewer", "Link to PR", "Add to sprint")
@@ -210,12 +259,123 @@ Most Azure DevOps work items support these fields:
 - `Microsoft.VSTS.Scheduling.OriginalEstimate` — Time estimate (hours)
 - `Microsoft.VSTS.Common.AcceptanceCriteria` — Acceptance criteria (HTML)
 
+### Assignee Identity Cross-Reference Fields
+Use these normalized fields whenever assignee identity must be matched across work items, comments, and external systems:
+
+| Canonical Field | Primary Source | Fallback Source | Notes |
+|-----------------|----------------|-----------------|-------|
+| `assignee_email` | `System.AssignedTo.uniqueName` | parse from `System.AssignedTo` string (`<email>`) | Primary key for matching |
+| `assignee_first_name` | parse from `System.AssignedTo.displayName` | parse from name portion of string value | Support `Last, First` and `First Last` formats |
+| `assignee_last_name` | parse from `System.AssignedTo.displayName` | parse from name portion of string value | Use last token when no comma exists |
+| `assignee_display_name` | `System.AssignedTo.displayName` | name portion before `<email>` | Preserve original capitalization |
+
+Observed assignees from Dynamics ERP work items changed in the last 6 months (current staff):
+
+| Email | First Name | Last Name |
+|-------|------------|-----------|
+| `dbarajas@andisco.com` | `Diego` | `Barajas` |
+| `dbatterman@andisco.com` | `Dakota` | `Batterman` |
+| `adiefenbach@andisco.com` | `Amanda` | `Diefenbach` |
+| `kgilman@andisco.com` | `Kyle` | `Gilman` |
+| `tjacobs@andisco.com` | `Tanner` | `Jacobs` |
+| `tjones@andisco.com` | `Terrie` | `Jones` |
+| `mjones-rinehart@andisco.com` | `Mica` | `Jones-Rinehart` |
+| `jkonicek@andisco.com` | `Jason` | `Konicek` |
+| `plawson@andisco.com` | `Paul` | `Lawson` |
+| `jlemke@andisco.com` | `Jon` | `Lemke` |
+| `nloose@andisco.com` | `Nick` | `Loose` |
+| `bmcintosh@andisco.com` | `Bobby` | `McIntosh` |
+| `apetersen@andisco.com` | `Ashley` | `Petersen` |
+| `kprochaska@andisco.com` | `Karin` | `Prochaska` |
+| `drawls@andisco.com` | `Derek` | `Rawls` |
+| `mschmidt@andisco.com` | `Matthew` | `Schmidt` |
+| `bschalk@andisco.com` | `Brian` | `Schalk` |
+| `Tariq.Sheikh@mcaconnect.com` | `Tariq` | `Sheikh` |
+| `Jterletzky@andisco.com` | `Judy` | `Terletzky` |
+| `jtouve@andisco.com` | `Jessica` | `Touve` |
+| `rtringali@andisco.com` | `Rick` | `Tringali` |
+
 ### Custom Fields
 Check project-specific custom fields using:
 ```powershell
 # List available fields for a project
 az boards field list --org https://dev.azure.com/andis-code --project "BI"
 ```
+
+## Querying Work Items by Assignee
+
+### Efficient Workflow for Finding Work Items by Name
+
+When a user requests work items for a specific person (by first name, last name, or full name):
+
+#### Step 1: Resolve Assignee Identity
+- If user provides an email address → use it directly
+- If user provides a partial name (first or last) → look up email from the assignee table above
+- If user provides full name → look up email from the assignee table above
+- If multiple matches exist → ask user to clarify
+
+#### Step 2: Query Work Items Using Search Tool
+Use `mcp_microsoft_azu_search_workitem` with the following approach:
+
+**Most Efficient (Recommended):**
+```
+searchText: "assignedTo:email@domain.com"
+project: ["Dynamics ERP"]  // or appropriate project
+state: ["New", "Active", "Committed", "In Progress", "Ready", "Resolved"]  // exclude "Closed" for active items
+top: 50  // adjust based on expected result size
+```
+
+**Alternative (works but less precise):**
+```
+searchText: "assignedTo:FirstName"  // or "assignedTo:LastName"
+```
+
+**Example:**
+```
+User asks: "Show me Mica's open work items"
+Action: Look up email → mjones-rinehart@andisco.com
+Query: searchText="assignedTo:mjones-rinehart@andisco.com", state=["New","Active"], top=50
+```
+
+#### Step 3: Format Results
+Present work items in a user-friendly table:
+
+| ID | State | Type | Title | Changed Date |
+|----|-------|------|-------|--------------|
+| ... | ... | ... | ... | ... |
+
+Include summary statistics:
+- Total active items
+- State breakdown
+- Key work areas (if patterns emerge)
+
+### Performance Comparison
+
+**❌ Inefficient Approach (OLD):**
+1. Query entire project backlog → 473+ items (46-56KB response)
+2. Batch retrieve 200 items at a time with full field details (82KB+ per batch)
+3. Client-side filter by assignee email
+4. Multiple API calls required
+
+**✅ Efficient Approach (RECOMMENDED):**
+1. Single `mcp_microsoft_azu_search_workitem` call with assignee filter
+2. Returns only matching work items (typically 10-50 items, 20-50KB response)
+3. Server-side filtering via Azure DevOps search index
+4. Supports state filtering to exclude closed items
+5. Single API call, minimal data transfer
+
+**Performance Gain:** 3-5x faster, 60-80% less data transfer
+
+### Troubleshooting
+
+**Issue:** Search returns 0 results with email in `assignedTo` parameter array
+**Solution:** Don't use the `assignedTo` parameter; use `searchText:"assignedTo:email"` instead
+
+**Issue:** User provides nickname or partial name
+**Solution:** Reference the assignee table to map common names to canonical email addresses
+
+**Issue:** Need to search across multiple projects
+**Solution:** Include multiple project names in `project` array parameter, or omit to search organization-wide
 
 ## Referenced Prompts
 - `prompts/system/default_system.md`
@@ -224,6 +384,11 @@ az boards field list --org https://dev.azure.com/andis-code --project "BI"
 - `mcp_microsoft_azu_wit_create_work_item` — Create work item
 - `mcp_microsoft_azu_core_list_projects` — List available projects
 - `mcp_microsoft_azu_wit_get_work_item` — Validate work item creation
+- `mcp_microsoft_azu_search_workitem` — **Primary tool for querying work items by assignee** (most efficient)
+- `mcp_microsoft_azu_wit_my_work_items` — ⚠️ Deprecated for assignee queries (only returns current user's items)
+- `mcp_microsoft_azu_wit_get_work_items_batch_by_ids` — Retrieve full field details for specific work item IDs
+- `mcp_microsoft_azu_wit_list_backlog_work_items` — Query project/team backlog (use sparingly, returns large datasets)
+- `mcp_microsoft_azu_core_list_project_teams` — List teams within a project
 
 ## Tags
 `azure-devops`, `work-items`, `project-management`, `automation`, `ado`

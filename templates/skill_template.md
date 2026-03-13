@@ -16,6 +16,12 @@
 2. **{{Step name}}** — {{What to do in this step.}}
 3. **{{Step name}}** — {{What to do in this step.}}
 
+## Progressive Disclosure
+
+- Start with the minimum required execution path before adding optional branches.
+- Group deeper guidance under clearly labeled optional sections so simple use cases stay concise.
+- Canonical guidance reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+
 ## Output
 
 {{Describe the expected output format. Include a markdown template if applicable.}}

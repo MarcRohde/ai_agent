@@ -15,10 +15,12 @@ This repository is a reusable skill library for AI coding agents. Use it to prov
 ## Rules
 1. Read `skill_library.md` before selecting a skill.
 2. Apply skill precedence: active project repo overrides workspace libraries, which override this repo.
-3. Use existing style and conventions; avoid unrelated edits.
-4. Confirm destructive operations unless explicitly authorized.
-5. Keep lessons learned in git for traceability and compounding quality.
-6. When this repo is used alongside project repos, enforce note-taking loops at both levels:
+3. Use progressive disclosure in instructions, skills, and docs: present the minimum required actions first, then reveal deeper detail only as needed.
+4. Keep this canonical reference for agent-skill guidance: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+5. Use existing style and conventions; avoid unrelated edits.
+6. Confirm destructive operations unless explicitly authorized.
+7. Keep lessons learned in git for traceability and compounding quality.
+8. When this repo is used alongside project repos, enforce note-taking loops at both levels:
    - `ai_agent` level: update relevant files in `learnings/` and `context/`.
    - active project repo level: update that repo's mission/context note files.
 

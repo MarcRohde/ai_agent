@@ -6,6 +6,7 @@ This standard defines how to configure repositories for layered AI memory and co
 
 - Make repository intent explicit for agents.
 - Keep context usage efficient through layered memory.
+- Use progressive disclosure so instructions start with required actions and expose depth only when needed.
 - Persist lessons learned in git for compounding quality.
 
 ## Layer Model
@@ -31,6 +32,8 @@ Include these sections:
 
 Rules must explicitly require:
 - reading repository guidance before changes
+- using progressive disclosure in instructions, skills, and docs
+- preserving a canonical best-practices reference for agent skill design: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
 - logging one-line dated lessons in repository files
 - creating a new focused context file when 3 or more similar lessons exist
 

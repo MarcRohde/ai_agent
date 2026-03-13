@@ -59,6 +59,8 @@ skills/
 - Additional skill-specific assets (scripts, configs, examples) can live alongside `skill.md`
 - Every skill follows the structure in `../templates/skill_template.md`
 - Register new skills in `../skill_library.md`
+- Apply progressive disclosure in every skill: required steps first, then optional depth
+- Canonical guidance reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
 
 ## Available Skills
 

@@ -8,6 +8,10 @@ Search this index by **category** or **skill name** to find the right skill, the
 
 > **Precedence Note:** This library is the **general-purpose default**. If another open workspace folder (e.g., a project repo or team library) defines a skill with the **same name**, that version takes priority. Project-specific skills always override this library, and other open libraries override it as well. See `AI Agents Overview.md § Skill Resolution & Precedence` for the full rules.
 
+> **Progressive Disclosure Standard:** Define and execute skills using progressive disclosure: provide the minimum required actions first, then expose deeper detail only when needed.
+
+> **Canonical Best-Practices Reference:** https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+
 ---
 
 ## Skills
@@ -100,5 +104,6 @@ Search this index by **category** or **skill name** to find the right skill, the
 
 1. Create a new folder in `skills/` named after the skill (e.g., `skills/my_skill/`).
 2. Add a `skill.md` file inside the folder using `templates/skill_template.md`.
-3. Add a row to the appropriate category table above.
-4. If a new category is needed, add a new `###` section.
+3. Structure skill instructions with progressive disclosure: lead with required steps, then add optional depth sections.
+4. Add a row to the appropriate category table above.
+5. If a new category is needed, add a new `###` section.

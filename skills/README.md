@@ -28,6 +28,20 @@ skills/
 │   └── skill.md
 ├── powershell_best_practices/
 │   └── skill.md
+├── workiq_calendar_mcp/
+│   └── skill.md
+├── workiq_copilot_mcp/
+│   └── skill.md
+├── workiq_mail_mcp/
+│   └── skill.md
+├── workiq_mail_operations/
+│   └── skill.md
+├── workiq_teams_mcp/
+│   └── skill.md
+├── workiq_user_mcp/
+│   └── skill.md
+├── workiq_word_mcp/
+│   └── skill.md
 ├── api_resilience/
 │   └── skill.md
 ├── refactor/
@@ -61,3 +75,10 @@ skills/
 | `api_resilience/` | API Integration | Retry, backoff, and throttling-safe API execution |
 | `powershell_best_practices/` | Scripting & Automation | Production-ready PowerShell patterns |
 | `azure_devops_work_item/` | Project Management | Azure DevOps work item creation with intelligent project inference |
+| `workiq_mail_operations/` | Work IQ MCP | Safe mailbox search/get/delete workflows with capability and verification checks |
+| `workiq_mail_mcp/` | Work IQ MCP | Mail server operations and workflow guardrails |
+| `workiq_user_mcp/` | Work IQ MCP | User profile server operations and identity context retrieval |
+| `workiq_calendar_mcp/` | Work IQ MCP | Calendar server operations and scheduling workflows |
+| `workiq_teams_mcp/` | Work IQ MCP | Teams server operations for collaboration workflows |
+| `workiq_word_mcp/` | Work IQ MCP | Word server operations for document workflows |
+| `workiq_copilot_mcp/` | Work IQ MCP | Copilot server operations for grounded M365 retrieval |

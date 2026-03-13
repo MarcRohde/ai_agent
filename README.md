@@ -13,6 +13,30 @@ This repository acts as a **skill library** — a knowledge base that AI agents 
 3. Ask it to perform a task — it will consult `CLAUDE.md` and `skill_library.md` to find the right skill.
 4. The agent reads the skill definition and executes the steps.
 
+## Work IQ MCP Bootstrap
+
+This workspace supports all documented Work IQ MCP servers (`mail`, `user`, `calendar`, `teams`, `word`, `copilot`).
+
+To bootstrap on a new machine:
+
+1. Set `EXO_CLIENT_ID` and `EXO_TENANT_ID`.
+	If you also use `start-outlook-auth-server.ps1`, set `EXO_CLIENT_SECRET` too.
+2. Ensure Azure CLI is logged in (`az login`).
+3. Run one of these:
+
+```powershell
+.\tools\scripts\Bootstrap-WorkIQEnvironment.ps1
+
+# or use the general bootstrap entrypoint and chain Work IQ setup
+.\tools\scripts\Bootstrap-DevEnvironment.ps1 -Variables @{
+	EXO_CLIENT_ID = '<client-app-id>'
+	EXO_TENANT_ID = '<tenant-id>'
+	EXO_CLIENT_SECRET = '<optional-outlook-auth-server-secret>'
+} -BootstrapWorkIQ
+```
+
+This flow syncs `.vscode/mcp.json`, acquires tokens for enabled Work IQ scopes, and validates server connectivity. It also seeds `MS_CLIENT_ID` / `MS_TENANT_ID` compatibility variables, plus `MS_CLIENT_SECRET` when provided, so `start-outlook-auth-server.ps1` can reuse the same environment without hardcoded values. If first-run consent is still required, token acquisition can pause on interactive sign-in or consent prompts.
+
 ## Repository Structure
 
 ```

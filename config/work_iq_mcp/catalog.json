@@ -1,0 +1,109 @@
+{
+    "version": 1,
+    "rolloutStrategy": {
+        "mode": "all-enabled",
+        "activeServerAliases": [
+            "workiq-mail",
+            "workiq-user",
+            "workiq-calendar",
+            "workiq-teams",
+            "workiq-word",
+            "workiq-copilot"
+        ],
+        "nextServerAliases": [],
+        "notes": [
+            "Install all Work IQ servers in VS Code MCP configuration for full local capability coverage.",
+            "Acquire one token per server scope using the shared app registration.",
+            "Keep Microsoft server IDs unchanged and use local aliases for workspace configuration."
+        ]
+    },
+    "namingConvention": {
+        "aliasPattern": "workiq-<capability>[-<environment>]",
+        "defaultEnvironment": "prod",
+        "serverIdRule": "Preserve Microsoft-published server IDs exactly.",
+        "documentationRule": "Store shared server metadata here and keep rollout guidance in README.md."
+    },
+    "localDevelopment": {
+        "transport": "http",
+        "authorizationHeaderPattern": "Bearer ${env:<TOKEN_ENV_VAR>}",
+        "tokenScript": "tools/scripts/Set-WorkIQMcpToken.ps1",
+        "validationScript": "tools/scripts/Test-WorkIQMcpServer.ps1",
+        "notes": [
+            "Use one token environment variable per enabled Work IQ server alias.",
+            "The current workspace uses direct VS Code MCP HTTP entries instead of ToolingManifest.json."
+        ]
+    },
+    "servers": [
+        {
+            "alias": "workiq-mail",
+            "serverId": "mcp_MailTools",
+            "displayName": "Work IQ Mail",
+            "scope": "McpServers.Mail.All",
+            "endpoint": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_MailTools/",
+            "tokenEnvVar": "WORKIQ_MAIL_TOKEN",
+            "enabledInVscode": true,
+            "status": "active",
+            "capabilityNotes": [
+                "Observed tool list includes SearchMessages, GetMessage, and DeleteMessage.",
+                "MoveMessage may not be exposed; move-to-deleted requests require explicit delete fallback confirmation.",
+                "DeleteMessage semantics may behave like hard delete, so verify with GetMessage instead of assuming Deleted Items visibility."
+            ],
+            "docsUrl": "https://learn.microsoft.com/microsoft-agent-365/mcp-server-reference/mail"
+        },
+        {
+            "alias": "workiq-user",
+            "serverId": "mcp_MeServer",
+            "displayName": "Work IQ User",
+            "scope": "McpServers.Me.All",
+            "endpoint": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_MeServer/",
+            "tokenEnvVar": "WORKIQ_USER_TOKEN",
+            "enabledInVscode": true,
+            "status": "active",
+            "docsUrl": "https://learn.microsoft.com/microsoft-agent-365/mcp-server-reference/me"
+        },
+        {
+            "alias": "workiq-calendar",
+            "serverId": "mcp_CalendarTools",
+            "displayName": "Work IQ Calendar",
+            "scope": "McpServers.Calendar.All",
+            "endpoint": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_CalendarTools/",
+            "tokenEnvVar": "WORKIQ_CALENDAR_TOKEN",
+            "enabledInVscode": true,
+            "status": "active",
+            "docsUrl": "https://learn.microsoft.com/microsoft-agent-365/mcp-server-reference/calendar"
+        },
+        {
+            "alias": "workiq-teams",
+            "serverId": "mcp_TeamsServer",
+            "displayName": "Work IQ Teams",
+            "scope": "McpServers.Teams.All",
+            "endpoint": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_TeamsServer/",
+            "tokenEnvVar": "WORKIQ_TEAMS_TOKEN",
+            "enabledInVscode": true,
+            "status": "active",
+            "docsUrl": "https://learn.microsoft.com/microsoft-agent-365/mcp-server-reference/teams"
+        },
+        {
+            "alias": "workiq-word",
+            "serverId": "mcp_WordServer",
+            "displayName": "Work IQ Word",
+            "scope": "McpServers.Word.All",
+            "endpoint": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_WordServer/",
+            "tokenEnvVar": "WORKIQ_WORD_TOKEN",
+            "enabledInVscode": true,
+            "status": "active",
+            "docsUrl": "https://learn.microsoft.com/microsoft-agent-365/mcp-server-reference/word"
+        },
+        {
+            "alias": "workiq-copilot",
+            "serverId": "mcp_M365Copilot",
+            "displayName": "Work IQ Copilot",
+            "scope": "McpServers.CopilotMCP.All",
+            "endpoint": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_M365Copilot/",
+            "tokenEnvVar": "WORKIQ_COPILOT_TOKEN",
+            "enabledInVscode": true,
+            "status": "active",
+            "docsUrl": "https://learn.microsoft.com/microsoft-agent-365/mcp-server-reference/searchtools"
+        }
+    ]
+}

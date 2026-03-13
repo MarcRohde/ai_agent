@@ -74,6 +74,18 @@ Search this index by **category** or **skill name** to find the right skill, the
 |-------|------|-------------|
 | Azure DevOps Work Item Creation | [skills/azure_devops_work_item/skill.md](skills/azure_devops_work_item/skill.md) | Create Azure DevOps work items with intelligent project inference, comprehensive descriptions, and attachment handling |
 
+### Work IQ MCP
+
+| Skill | File | Description |
+|-------|------|-------------|
+| WorkIQ Mail Operations | [skills/workiq_mail_operations/skill.md](skills/workiq_mail_operations/skill.md) | Search, inspect, and delete mail with capability discovery, fallback gates, and verification |
+| WorkIQ Mail MCP | [skills/workiq_mail_mcp/skill.md](skills/workiq_mail_mcp/skill.md) | Use Work IQ Mail MCP for mailbox read/write workflows with safety guardrails |
+| WorkIQ User MCP | [skills/workiq_user_mcp/skill.md](skills/workiq_user_mcp/skill.md) | Use Work IQ User MCP for identity and user context retrieval |
+| WorkIQ Calendar MCP | [skills/workiq_calendar_mcp/skill.md](skills/workiq_calendar_mcp/skill.md) | Use Work IQ Calendar MCP for scheduling and event workflows |
+| WorkIQ Teams MCP | [skills/workiq_teams_mcp/skill.md](skills/workiq_teams_mcp/skill.md) | Use Work IQ Teams MCP for collaboration and Teams operations |
+| WorkIQ Word MCP | [skills/workiq_word_mcp/skill.md](skills/workiq_word_mcp/skill.md) | Use Work IQ Word MCP for document-oriented workflows |
+| WorkIQ Copilot MCP | [skills/workiq_copilot_mcp/skill.md](skills/workiq_copilot_mcp/skill.md) | Use Work IQ Copilot MCP for grounded M365 Copilot-style operations |
+
 ### Andis BI Data Engineering
 
 | Skill | File | Description |

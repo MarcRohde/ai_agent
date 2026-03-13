@@ -22,6 +22,12 @@
 .PARAMETER SkipToolInstall
     Skip automatic installation of MCP tools (e.g., @playwright/mcp).
 
+.PARAMETER BootstrapWorkIQ
+    After setting base environment variables, run the Work IQ MCP bootstrap flow.
+
+.PARAMETER ContinueOnError
+    Continue through optional Work IQ bootstrap failures and surface warnings instead of stopping immediately.
+
 .EXAMPLE
     .\Bootstrap-DevEnvironment.ps1 -Variables @{
         TENANT_ID='7d2c093d-4c2f-41e8-b222-0039fd152112'
@@ -30,6 +36,13 @@
 
 .EXAMPLE
     .\Bootstrap-DevEnvironment.ps1 -Variables @{API_KEY='secret'} -PersistScope Machine
+
+.EXAMPLE
+    .\Bootstrap-DevEnvironment.ps1 -Variables @{
+        EXO_CLIENT_ID='71c9fb1e-949c-45f0-9e01-f2ffbb1fc1fe'
+        EXO_TENANT_ID='7d2c093d-4c2f-41e8-b222-0039fd152112'
+        EXO_CLIENT_SECRET='<optional-outlook-auth-server-secret>'
+    } -BootstrapWorkIQ
 
 .NOTES
     Author: AI Agent
@@ -53,7 +66,13 @@ param(
     [switch]$SkipValidation,
 
     [Parameter(Mandatory = $false)]
-    [switch]$SkipToolInstall
+    [switch]$SkipToolInstall,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$BootstrapWorkIQ,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$ContinueOnError
 )
 
 Set-StrictMode -Version Latest
@@ -123,6 +142,20 @@ function Install-PlaywrightMcp {
     }
 }
 
+function Get-VariableValue {
+    param(
+        [hashtable]$Map,
+        [string]$Name,
+        [string]$Fallback
+    )
+
+    if ($null -ne $Map -and $Map.ContainsKey($Name)) {
+        return [string]$Map[$Name]
+    }
+
+    return $Fallback
+}
+
 # Pre-flight checks
 Write-Host "Dev Environment Bootstrap" -ForegroundColor Cyan
 Write-Host ("=" * 50)
@@ -137,84 +170,140 @@ if (-not $SkipToolInstall) {
     Install-PlaywrightMcp
 }
 
-if ($Variables.Count -eq 0) {
-    Write-Warning "No variables provided. Nothing to do."
-    exit 0
-}
-
-# Set variables
 $updateSession = -not $DoNotUpdateCurrentSession.IsPresent
 $successCount = 0
 $failureCount = 0
 $results = @()
+$workIqBootstrapFailed = $false
 
-Write-Host "`nSetting $($Variables.Count) environment variable(s) at $PersistScope scope..." -ForegroundColor White
+if ($Variables.Count -gt 0) {
+    Write-Host "`nSetting $($Variables.Count) environment variable(s) at $PersistScope scope..." -ForegroundColor White
 
-foreach ($entry in $Variables.GetEnumerator()) {
-    $name = $entry.Key
-    $value = $entry.Value
+    foreach ($entry in $Variables.GetEnumerator()) {
+        $name = $entry.Key
+        $value = $entry.Value
 
-    Write-Host "  Setting $name..." -NoNewline
+        Write-Host "  Setting $name..." -NoNewline
 
-    $success = Set-EnvironmentVariable -Name $name -Value $value -Scope $PersistScope -UpdateSession $updateSession
+        $success = Set-EnvironmentVariable -Name $name -Value $value -Scope $PersistScope -UpdateSession $updateSession
 
-    if ($success) {
-        Write-Host " OK" -ForegroundColor Green
-        $successCount++
-        $results += [PSCustomObject]@{
-            Variable = $name
-            Status   = 'Set'
-            Scope    = $PersistScope
-            Value    = if ($name -match 'SECRET|PASSWORD|KEY|TOKEN') { '***' } else { $value }
+        if ($success) {
+            Write-Host " OK" -ForegroundColor Green
+            $successCount++
+            $results += [PSCustomObject]@{
+                Variable = $name
+                Status   = 'Set'
+                Scope    = $PersistScope
+                Value    = if ($name -match 'SECRET|PASSWORD|KEY|TOKEN') { '***' } else { $value }
+            }
+        }
+        else {
+            Write-Host " FAILED" -ForegroundColor Red
+            $failureCount++
+            $results += [PSCustomObject]@{
+                Variable = $name
+                Status   = 'Failed'
+                Scope    = $PersistScope
+                Value    = ''
+            }
         }
     }
+
+    # Summary
+    Write-Host "`n" + ("=" * 50)
+    Write-Host "Summary:" -ForegroundColor Cyan
+    Write-Host "  Success: $successCount" -ForegroundColor Green
+    Write-Host "  Failed : $failureCount" -ForegroundColor $(if ($failureCount -gt 0) { 'Red' } else { 'Gray' })
+    Write-Host "  Scope  : $PersistScope"
+
+    if ($updateSession) {
+        Write-Host "  Session: Updated" -ForegroundColor Green
+    }
     else {
-        Write-Host " FAILED" -ForegroundColor Red
-        $failureCount++
-        $results += [PSCustomObject]@{
-            Variable = $name
-            Status   = 'Failed'
-            Scope    = $PersistScope
-            Value    = ''
+        Write-Host "  Session: Not updated (restart terminal to see changes)" -ForegroundColor Yellow
+    }
+
+    # Display results table
+    Write-Host "`nVariables Set:" -ForegroundColor White
+    $results | Format-Table -AutoSize
+
+    # Validation
+    if (-not $SkipValidation -and $successCount -gt 0) {
+        Write-Host "`nValidating environment..." -ForegroundColor Cyan
+
+        $validationScript = Join-Path $PSScriptRoot "Validate-DevEnvironment.ps1"
+        if (Test-Path $validationScript) {
+            $varNames = $Variables.Keys | ForEach-Object { $_ }
+            & $validationScript -RequiredVariables $varNames -Quiet:$false
+        }
+        else {
+            Write-Host "  Validation script not found. Skipping validation." -ForegroundColor Yellow
         }
     }
 }
-
-# Summary
-Write-Host "`n" + ("=" * 50)
-Write-Host "Summary:" -ForegroundColor Cyan
-Write-Host "  Success: $successCount" -ForegroundColor Green
-Write-Host "  Failed : $failureCount" -ForegroundColor $(if ($failureCount -gt 0) { 'Red' } else { 'Gray' })
-Write-Host "  Scope  : $PersistScope"
-
-if ($updateSession) {
-    Write-Host "  Session: Updated" -ForegroundColor Green
+elseif (-not $BootstrapWorkIQ.IsPresent) {
+    Write-Warning "No variables provided. Nothing to do."
+    exit 0
 }
 else {
-    Write-Host "  Session: Not updated (restart terminal to see changes)" -ForegroundColor Yellow
+    Write-Host "`nNo base variables provided. Proceeding directly to optional Work IQ bootstrap." -ForegroundColor Yellow
 }
 
-# Display results table
-Write-Host "`nVariables Set:" -ForegroundColor White
-$results | Format-Table -AutoSize
-
-# Validation
-if (-not $SkipValidation -and $successCount -gt 0) {
-    Write-Host "`nValidating environment..." -ForegroundColor Cyan
-
-    $validationScript = Join-Path $PSScriptRoot "Validate-DevEnvironment.ps1"
-    if (Test-Path $validationScript) {
-        $varNames = $Variables.Keys | ForEach-Object { $_ }
-        & $validationScript -RequiredVariables $varNames -Quiet:$false
+if ($BootstrapWorkIQ.IsPresent) {
+    $workIqBootstrapScript = Join-Path $PSScriptRoot 'Bootstrap-WorkIQEnvironment.ps1'
+    if (-not (Test-Path $workIqBootstrapScript)) {
+        $message = "Work IQ bootstrap script not found: $workIqBootstrapScript"
+        if ($ContinueOnError.IsPresent) {
+            Write-Warning $message
+            $workIqBootstrapFailed = $true
+        }
+        else {
+            throw $message
+        }
     }
     else {
-        Write-Host "  Validation script not found. Skipping validation." -ForegroundColor Yellow
+        $clientAppId = Get-VariableValue -Map $Variables -Name 'EXO_CLIENT_ID' -Fallback $env:EXO_CLIENT_ID
+        if ([string]::IsNullOrWhiteSpace($clientAppId)) {
+            $clientAppId = Get-VariableValue -Map $Variables -Name 'MS_CLIENT_ID' -Fallback $env:MS_CLIENT_ID
+        }
+
+        $tenantId = Get-VariableValue -Map $Variables -Name 'EXO_TENANT_ID' -Fallback $env:EXO_TENANT_ID
+        if ([string]::IsNullOrWhiteSpace($tenantId)) {
+            $tenantId = Get-VariableValue -Map $Variables -Name 'MS_TENANT_ID' -Fallback $env:MS_TENANT_ID
+        }
+
+        $clientSecret = Get-VariableValue -Map $Variables -Name 'EXO_CLIENT_SECRET' -Fallback $env:EXO_CLIENT_SECRET
+        if ([string]::IsNullOrWhiteSpace($clientSecret)) {
+            $clientSecret = Get-VariableValue -Map $Variables -Name 'MS_CLIENT_SECRET' -Fallback $env:MS_CLIENT_SECRET
+        }
+
+        Write-Host "`nRunning chained Work IQ bootstrap..." -ForegroundColor Cyan
+
+        try {
+            & $workIqBootstrapScript `
+                -ClientAppId $clientAppId `
+                -ClientSecret $clientSecret `
+                -TenantId $tenantId `
+                -PersistScope $PersistScope `
+                -DoNotUpdateCurrentSession:$DoNotUpdateCurrentSession.IsPresent `
+                -SkipValidation:$SkipValidation.IsPresent `
+                -ContinueOnError:$ContinueOnError.IsPresent
+        }
+        catch {
+            $workIqBootstrapFailed = $true
+            if ($ContinueOnError.IsPresent) {
+                Write-Warning "Work IQ bootstrap failed: $($_.Exception.Message)"
+            }
+            else {
+                throw
+            }
+        }
     }
 }
 
 Write-Host "`nBootstrap complete." -ForegroundColor Green
 
-if ($failureCount -gt 0) {
+if ($failureCount -gt 0 -or $workIqBootstrapFailed) {
     exit 1
 }
 

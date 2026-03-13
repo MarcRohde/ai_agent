@@ -1,0 +1,37 @@
+# Repository Learning Log
+
+- 2026-03-02 | Dedicated OAuth2 and API resilience skills reduce repeated integration setup and throttling troubleshooting.
+- 2026-03-02 | PowerShell script quality improves when ShouldProcess, structured logging, and parameter validation are standardized.
+- 2026-03-02 | Environment bootstrap and validation scripts should be paired to prevent machine-specific configuration drift.
+- 2026-03-02 | A dedicated PowerShell syntax validation tool would reduce feedback latency compared with manual terminal checks.
+- 2026-03-02 | Cross-platform environment variable management is a high-value reusable capability for onboarding and reliability.
+- 2026-03-07 | Join determinism must be validated before semantic view edits proceed.
+- 2026-03-07 | Attribute enrichment should remain at the correct grain and be proven through deterministic bridge paths.
+- 2026-03-07 | Rollback scripts should exist before deployment so implementation pivots remain safe.
+- 2026-03-07 | Source-target mismatch checks are objective release criteria for semantic changes.
+- 2026-03-07 | Temporary artifacts should be removed after validation to keep repos clean and reduce confusion.
+- 2026-03-08 | Token acquisition should use an ordered fallback path: cached token, refresh token, Azure CLI, then device code.
+- 2026-03-08 | Locale-safe Graph endpoints and strict null-safe error handling reduce runtime failures in M365 scripts.
+- 2026-03-08 | Work item analysis must filter by work item type instead of relying on keyword content search alone.
+- 2026-03-08 | Cross-database large updates should stage reference data locally before joins to avoid timeout and lock contention.
+- 2026-03-08 | ETL logic changes do not backfill historical data automatically and require explicit backfill planning.
+- 2026-03-08 | Batch updates with transaction-per-batch and progress logging provide a strong balance of safety and performance.
+- 2026-03-08 | Parallel subagents can dramatically reduce multi-script delivery time when workstreams are independent.
+- 2026-03-08 | Attribution and tracking standards should be enforced consistently in generated artifacts.
+- 2026-03-08 | Use Azure DevOps search APIs with server-side filtering instead of backlog-plus-batch retrieval to reduce call count and data transfer.
+- 2026-03-08 | Maintain assignee reference tables in skill docs so name-to-email resolution can happen without extra identity API calls.
+- 2026-03-08 | When assignedTo array filtering fails, use searchText syntax such as assignedTo:user@domain.com.
+- 2026-03-08 | Fetch summary fields first and lazy-load full details only for user-selected records.
+- 2026-03-08 | Add explicit complexity metadata to skills to improve routing and avoid over-provisioning on simple tasks.
+- 2026-03-08 | Deployment scripts should set explicit database context in multi-database environments.
+- 2026-03-08 | Verify column names with INFORMATION_SCHEMA before scripting to prevent naming-assumption failures.
+- 2026-03-08 | Three-tier precedence backfill logic can maximize coverage while preserving deterministic matching.
+- 2026-03-12 | Preserve URL-encoded ItemID values exactly; decoding can break downstream Graph parsing.
+- 2026-03-12 | Capability discovery must occur before move-to-deleted workflows because MoveMessage may be unavailable.
+- 2026-03-12 | Delete operations should be verified with a follow-up GetMessage call for operational confidence.
+- 2026-03-12 | Search outputs may require parsing OWA links to extract ItemID values.
+- 2026-03-12 | Token environment variables alone do not prove endpoint authorization readiness.
+- 2026-03-12 | catalog.json should remain the canonical source for MCP server config and regeneration.
+- 2026-03-12 | MCP test flows must run in one process/session to preserve session identity.
+- 2026-03-12 | Auth startup scripts should normalize EXO_* and MS_* compatibility aliases across scopes for better portability.
+- 2026-03-13 | Consolidated legacy dated learning documents into this canonical one-line log to keep the learnings folder aligned with its README.

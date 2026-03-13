@@ -7,14 +7,20 @@ This folder stores committed one-line lessons discovered while working in this r
 Use:
 - `- YYYY-MM-DD | lesson`
 
+## File Structure
+
+- `lessons.md`: Canonical repository learning log. Append new lessons here.
+
 ## Rules
 
 - Keep lessons specific, actionable, and scoped to this repository.
-- If 3 or more lessons are closely related, create a focused context file in `../context/`.
-- When work also impacts `ai_agent`, log corresponding library-level lessons there as well.
+- Keep one lesson per line using the required format.
+- If 3 or more lessons are closely related, create a focused context file in `../context/` and summarize the pattern there.
+- When work also impacts an active project repository, log corresponding project-level lessons in that repository too.
 
 ## Related Files
 
 - `../AGENTS.md`
 - `../context/README.md`
-- `../SCRIPTS-ORGANIZATION.md`
+- `../skill_library.md`
+- `../config/repository_configuration_standard.md`

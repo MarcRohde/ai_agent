@@ -10,8 +10,18 @@ This repository acts as a **skill library** — a knowledge base that AI agents 
 
 1. Open this repository in VS Code.
 2. Start a chat session with Claude Code (or another AI agent).
-3. Ask it to perform a task — it will consult `CLAUDE.md` and `skill_library.md` to find the right skill.
+3. Ask it to perform a task — it will consult `AGENTS.md` (fallback: `CLAUDE.md`) and `skill_library.md` to find the right skill.
 4. The agent reads the skill definition and executes the steps.
+
+## Repository Memory Model
+
+This repository uses a layered model for persistent quality and continuity:
+
+1. **Layer 1 (Global instructions):** short, always-on profile and behavior preferences in agent settings.
+2. **Layer 2 (Repository mission):** `AGENTS.md` and `CLAUDE.md` define repo purpose, tree, rules, and note-taking loop.
+3. **Layer 3 (Context files):** `context/` files capture standards, examples, and dated lessons.
+
+Lessons learned are intentionally committed in git. When work spans this library and another project repo, capture learnings in both scopes.
 
 ## Work IQ MCP Bootstrap
 
@@ -41,6 +51,7 @@ This flow syncs `.vscode/mcp.json`, acquires tokens for enabled Work IQ scopes, 
 
 ```
 ai_agent/
+├── AGENTS.md              # Primary repository mission file
 ├── CLAUDE.md              # Agent project instructions (read first)
 ├── README.md              # This file
 ├── skill_library.md       # Master index of all skills
@@ -73,6 +84,7 @@ ai_agent/
 ├── tools/                 # Helper scripts and utilities
 ├── templates/             # Templates for creating new skills/prompts
 ├── config/                # Configuration and defaults
+├── context/               # Layer-3 context standards and learning references
 └── learnings/             # Post-project reflections and recommendations
 ```
 

@@ -67,6 +67,7 @@ Search this index by **category** or **skill name** to find the right skill, the
 | Skill | File | Description |
 |-------|------|-------------|
 | Dev Environment Bootstrap | [skills/dev_environment_bootstrap/skill.md](skills/dev_environment_bootstrap/skill.md) | Create portable bootstrap scripts for consistent development environment setup |
+| Repository Configuration Scaffold | [skills/repository_configuration_scaffold/skill.md](skills/repository_configuration_scaffold/skill.md) | Configure mission/context scaffolding and committed learning loops for new or existing repositories |
 
 ### Project Management
 

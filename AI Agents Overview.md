@@ -12,6 +12,7 @@ This repository is an **AI Skill Library** — a collection of reusable skills, 
 | `tools/`       | Helper scripts and tool definitions that skills can invoke    |
 | `templates/`   | Scaffolding templates for creating new skills and prompts     |
 | `config/`      | Configuration files for skill behavior and defaults           |
+| `context/`     | Layer-3 context files with standards, examples, and dated lessons |
 | `learnings/`   | Post-project reflections, skill recommendations, and lessons learned |
 
 ## Conventions
@@ -27,6 +28,17 @@ This repository is an **AI Skill Library** — a collection of reusable skills, 
 - System prompts live in `prompts/system/`.
 - Task-specific prompt templates live in `prompts/templates/`.
 - Prompts use `{{placeholder}}` syntax for variable substitution.
+
+### Mission Files
+- Repository mission files live at the repository root: `AGENTS.md` and `CLAUDE.md`.
+- Mission files should include **Purpose**, **Repository Tree**, **Rules**, and **Note-Taking Loop**.
+- Agents should read `AGENTS.md` first and use `CLAUDE.md` as compatibility fallback.
+
+### Context Files
+- Repository context files live in `context/`.
+- Each context file should include **Header**, **Content**, and **Learning Log**.
+- Learning logs use dated one-line entries in the format: `- YYYY-MM-DD | lesson`.
+- If 3+ similar lessons accumulate, create a focused context file and update indexes.
 
 ### Tools / Scripts
 - Executable scripts live in `tools/scripts/`.
@@ -99,7 +111,10 @@ After completing significant development tasks (3+ hours of work), create a lear
 
 See `learnings/README.md` for the template and naming conventions. Use format: `{type}-{YYYY-MM-DD}.md` (e.g., `recommendations-2026-03-02.md`).
 
+For repositories using the layered model, also update `context/` learning logs with one-line dated lessons. When work impacts both this library and an active project repository, record learnings in both scopes.
+
 ## Important Notes
+- Always read `AGENTS.md` first (fallback: `CLAUDE.md`) when looking for repository-specific rules.
 - Always read `skill_library.md` first when looking for available skills.
 - Skills are composable — one skill can reference another.
 - When creating new skills, register them in `skill_library.md`.

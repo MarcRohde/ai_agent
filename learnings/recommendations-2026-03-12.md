@@ -5,6 +5,16 @@
 
 ---
 
+## Header
+
+- Purpose: Capture safe operational patterns and required guardrails for WorkIQ Mail MCP mutation workflows.
+- Use when: Implementing mailbox search/get/delete/move-adjacent actions and related auth/bootstrap flows.
+- Scope: `ai_agent` WorkIQ skills, prompts, scripts, and configuration.
+
+---
+
+## Content
+
 ## Lessons Learned
 
 ### 1. ItemID encoding must be preserved
@@ -105,3 +115,15 @@
 ## Notes
 
 This recommendation set focuses on safety and repeatability for mailbox operations where tool capability surfaces can differ from user intent.
+
+---
+
+## Learning Log
+
+- 2026-03-12 | Preserve URL-encoded ItemID values exactly; decoding can break downstream Graph parsing.
+- 2026-03-12 | Capability discovery must occur before move-to-deleted workflows because MoveMessage may be unavailable.
+- 2026-03-12 | Delete operations should be verified with a follow-up GetMessage call for operational confidence.
+- 2026-03-12 | Search outputs may require parsing OWA links to extract ItemID values.
+- 2026-03-12 | Token environment variables alone do not prove endpoint authorization readiness.
+- 2026-03-12 | `catalog.json` should remain the canonical source for MCP server config and regeneration.
+- 2026-03-12 | MCP test flows must run in one process/session to preserve session identity.

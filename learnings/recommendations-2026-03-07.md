@@ -5,6 +5,16 @@
 
 ---
 
+## Header
+
+- Purpose: Preserve SQL semantic-layer rollout lessons that should influence skill guardrails and prompts.
+- Use when: Planning or deploying `ods.dim*` changes, backfills, and BI rollout validation.
+- Scope: `ai_agent` BI skills and prompt templates.
+
+---
+
+## Content
+
 ## New Skills Added/Recommended
 
 ### 1. Andis BI Semantic View Change
@@ -111,3 +121,13 @@ Added required output sections for:
 - `prompts/templates/andis_bi_db_change_request.md`
 - `work-projects/scripts/SQL/Add-CustomerType-To-ods-dimContact.sql`
 - `work-projects/scripts/SQL/Add-CustomerType-To-ods-dimContact-PROD.sql`
+
+---
+
+## Learning Log
+
+- 2026-03-07 | Join determinism must be validated before semantic view edits proceed.
+- 2026-03-07 | Attribute enrichment should remain at the correct grain and be proven through deterministic bridge paths.
+- 2026-03-07 | Rollback scripts should exist before deployment so implementation pivots remain safe.
+- 2026-03-07 | Source-target mismatch checks are objective release criteria for semantic changes.
+- 2026-03-07 | Temporary artifacts should be removed after validation to keep repos clean and reduce confusion.

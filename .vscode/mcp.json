@@ -1,53 +1,46 @@
 {
-  "servers": {
-    "playwright": {
-      "command": "npx",
-      "args": [
-        "@playwright/mcp@latest"
-      ]
-    },
-    "workiq-mail": {
-      "type": "http",
-      "url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_MailTools/",
-      "headers": {
-        "Authorization": "Bearer ${env:WORKIQ_MAIL_TOKEN}"
-      }
-    },
-    "workiq-user": {
-      "type": "http",
-      "url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_MeServer/",
-      "headers": {
-        "Authorization": "Bearer ${env:WORKIQ_USER_TOKEN}"
-      }
-    },
-    "workiq-calendar": {
-      "type": "http",
-      "url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_CalendarTools/",
-      "headers": {
-        "Authorization": "Bearer ${env:WORKIQ_CALENDAR_TOKEN}"
-      }
-    },
-    "workiq-teams": {
-      "type": "http",
-      "url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_TeamsServer/",
-      "headers": {
-        "Authorization": "Bearer ${env:WORKIQ_TEAMS_TOKEN}"
-      }
-    },
-    "workiq-word": {
-      "type": "http",
-      "url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_WordServer/",
-      "headers": {
-        "Authorization": "Bearer ${env:WORKIQ_WORD_TOKEN}"
-      }
-    },
-    "workiq-copilot": {
-      "type": "http",
-      "url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_M365Copilot/",
-      "headers": {
-        "Authorization": "Bearer ${env:WORKIQ_COPILOT_TOKEN}"
-      }
-    }
-  }
+	"servers": {
+		"workiq-mail": {
+			"type": "http",
+			"url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_MailTools/",
+			"headers": {
+				"Authorization": "Bearer ${env:WORKIQ_MAIL_TOKEN}"
+			}
+		},
+		"workiq-user": {
+			"type": "http",
+			"url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_MeServer/",
+			"headers": {
+				"Authorization": "Bearer ${env:WORKIQ_USER_TOKEN}"
+			}
+		},
+		"workiq-calendar": {
+			"type": "http",
+			"url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_CalendarTools/",
+			"headers": {
+				"Authorization": "Bearer ${env:WORKIQ_CALENDAR_TOKEN}"
+			}
+		},
+		"workiq-teams": {
+			"type": "http",
+			"url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_TeamsServer/",
+			"headers": {
+				"Authorization": "Bearer ${env:WORKIQ_TEAMS_TOKEN}"
+			}
+		},
+		"workiq-word": {
+			"type": "http",
+			"url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_WordServer/",
+			"headers": {
+				"Authorization": "Bearer ${env:WORKIQ_WORD_TOKEN}"
+			}
+		},
+		"workiq-copilot": {
+			"type": "http",
+			"url": "https://agent365.svc.cloud.microsoft/agents/servers/mcp_M365Copilot/",
+			"headers": {
+				"Authorization": "Bearer ${env:WORKIQ_COPILOT_TOKEN}"
+			}
+		}
+	}
 }
-

@@ -46,6 +46,8 @@ skills/
 │   └── skill.md
 ├── refactor/
 │   └── skill.md
+├── repository_configuration_scaffold/
+│   └── skill.md
 └── README.md
 ```
 
@@ -75,6 +77,7 @@ skills/
 | `api_resilience/` | API Integration | Retry, backoff, and throttling-safe API execution |
 | `powershell_best_practices/` | Scripting & Automation | Production-ready PowerShell patterns |
 | `azure_devops_work_item/` | Project Management | Azure DevOps work item creation with intelligent project inference |
+| `repository_configuration_scaffold/` | DevOps & Environment | Scaffold repository mission/context files and learning loops |
 | `workiq_mail_operations/` | Work IQ MCP | Safe mailbox search/get/delete workflows with capability and verification checks |
 | `workiq_mail_mcp/` | Work IQ MCP | Mail server operations and workflow guardrails |
 | `workiq_user_mcp/` | Work IQ MCP | User profile server operations and identity context retrieval |

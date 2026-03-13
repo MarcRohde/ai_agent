@@ -5,6 +5,16 @@
 
 ---
 
+## Header
+
+- Purpose: Capture reusable patterns and skill/tool improvements discovered during the EWS mailbox migration project.
+- Use when: Creating or improving auth, API resilience, PowerShell automation, and bootstrap workflows.
+- Scope: `ai_agent` skill library and tooling improvements.
+
+---
+
+## Content
+
 ## New Skills Added
 
 ### 1. OAuth2 Integration
@@ -179,3 +189,13 @@ manage_environment_variables(
 - [EWS Throttling Documentation](https://learn.microsoft.com/en-us/exchange/client-developer/exchange-web-services/ews-throttling-in-exchange)
 - [OAuth2 Device Code Flow](https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-device-code)
 - [PowerShell Best Practices and Style Guide](https://poshcode.gitbook.io/powershell-practice-and-style)
+
+---
+
+## Learning Log
+
+- 2026-03-02 | Dedicated OAuth2 and API resilience skills reduce repeated integration setup and throttling troubleshooting.
+- 2026-03-02 | PowerShell script quality improves when ShouldProcess, structured logging, and parameter validation are standardized.
+- 2026-03-02 | Environment bootstrap and validation scripts should be paired to prevent machine-specific configuration drift.
+- 2026-03-02 | A dedicated PowerShell syntax validation tool would reduce feedback latency compared with manual terminal checks.
+- 2026-03-02 | Cross-platform environment variable management is a high-value reusable capability for onboarding and reliability.

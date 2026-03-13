@@ -5,6 +5,16 @@
 
 ---
 
+## Header
+
+- Purpose: Consolidate high-impact lessons from M365, Azure DevOps, and BI deployment work completed on 2026-03-08.
+- Use when: Updating skills, prompts, tooling, and deployment practices related to these domains.
+- Scope: `ai_agent` library patterns and cross-repo operational standards.
+
+---
+
+## Content
+
 ## Lessons Learned
 
 ### Reliability Lessons
@@ -574,3 +584,16 @@ This pattern applies to similar scenarios:
 - [ ] Update AI Agent skills with learnings from this session
 - [ ] Create reusable templates from deployment scripts
 - [ ] Document any production-specific findings in repo memory
+
+---
+
+## Learning Log
+
+- 2026-03-08 | Token acquisition should use an ordered fallback path: cached token, refresh token, Azure CLI, then device code.
+- 2026-03-08 | Locale-safe Graph endpoints and strict null-safe error handling reduce runtime failures in M365 scripts.
+- 2026-03-08 | Work item analysis must filter by work item type instead of relying on keyword content search alone.
+- 2026-03-08 | Cross-database large updates should stage reference data locally before joins to avoid timeout and lock contention.
+- 2026-03-08 | ETL logic changes do not backfill historical data automatically and require explicit backfill planning.
+- 2026-03-08 | Batch updates with transaction-per-batch and progress logging provide a strong balance of safety and performance.
+- 2026-03-08 | Parallel subagents can dramatically reduce multi-script delivery time when workstreams are independent.
+- 2026-03-08 | Attribution and tracking standards should be enforced consistently in generated artifacts.

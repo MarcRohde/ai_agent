@@ -5,6 +5,16 @@
 
 ---
 
+## Header
+
+- Purpose: Document cost-efficiency patterns for skill execution and tool selection.
+- Use when: Designing or revising skills where data transfer, call count, and model usage affect cost.
+- Scope: `ai_agent` skill design and operational execution patterns.
+
+---
+
+## Content
+
 ## Purpose
 
 This document establishes patterns for optimizing AI agent costs while maintaining quality. It provides guidance on when to use efficient methods, when to escalate to more powerful models, and how to structure skills to minimize token usage and API calls.
@@ -389,3 +399,13 @@ Keep frequently-needed lookup data in the skill itself.
 - Azure DevOps Search API: `mcp_microsoft_azu_search_workitem`
 - Performance Test Results: Mica (60 items), Karin (114 items), Matthew (25 items), Kyle (181 items)
 - Date: 2026-03-08
+
+---
+
+## Learning Log
+
+- 2026-03-08 | Indexed search with server-side filtering should be preferred over backlog-plus-batch patterns for lower cost and faster execution.
+- 2026-03-08 | Reference table lookups in skill docs can eliminate repeated identity-resolution API calls.
+- 2026-03-08 | Fetch-minimum-first and lazy detail loading significantly reduces unnecessary transfer and token usage.
+- 2026-03-08 | Work item type filtering is required for accurate analysis when keyword search returns mixed item types.
+- 2026-03-08 | Complexity routing guidance in skills helps prevent overuse of expensive execution paths for simple tasks.

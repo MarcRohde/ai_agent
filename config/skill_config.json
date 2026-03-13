@@ -34,9 +34,24 @@
     "auto_run_tests": true,
     "confirm_destructive_actions": true
   },
+  "repository_memory": {
+    "mission_files": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ],
+    "context_directory": "context",
+    "lesson_entry_format": "- YYYY-MM-DD | lesson",
+    "consolidation_threshold": 3,
+    "commit_lessons_to_git": true,
+    "dual_scope_logging": true
+  },
   "skills": {
     "code_review": {
-      "severity_levels": ["critical", "warning", "suggestion"],
+      "severity_levels": [
+        "critical",
+        "warning",
+        "suggestion"
+      ],
       "max_file_size_lines": 1000
     },
     "generate_tests": {
@@ -50,7 +65,13 @@
     },
     "git_operations": {
       "commit_style": "conventional",
-      "branch_prefixes": ["feature", "bugfix", "hotfix", "chore", "docs"],
+      "branch_prefixes": [
+        "feature",
+        "bugfix",
+        "hotfix",
+        "chore",
+        "docs"
+      ],
       "default_base_branch": "main"
     },
     "refactor": {

@@ -60,6 +60,12 @@ Search this index by **category** or **skill name** to find the right skill, the
 |-------|------|-------------|
 | M365 Graph Knowledge | [skills/m365_graph_knowledge/skill.md](skills/m365_graph_knowledge/skill.md) | Retrieve grounded answers from Microsoft 365 (including non-synced SharePoint/OneDrive content) using Graph search and connector-backed external items |
 
+### Google Workspace
+
+| Skill | File | Description |
+|-------|------|-------------|
+| Google Workspace (gws) | [skills/gws_google_workspace/skill.md](skills/gws_google_workspace/skill.md) | Use the `gws` CLI to interact with Gmail, Calendar, Drive, Docs, Sheets, Tasks, Contacts, Chat, and other Google Workspace services |
+
 ### Scripting & Automation
 
 | Skill | File | Description |

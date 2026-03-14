@@ -36,3 +36,4 @@
 - 2026-03-12 | Auth startup scripts should normalize EXO_* and MS_* compatibility aliases across scopes for better portability.
 - 2026-03-13 | Consolidated legacy dated learning documents into this canonical one-line log to keep the learnings folder aligned with its README.
 - 2026-03-13 | Progressive disclosure should be a required standard across mission files, skill libraries, templates, and context docs with a canonical link to Claude agent-skills best practices.
+- 2026-03-13 | Recovery bootstrap reliability improves when a single top-level entrypoint validates Azure auth/tool prerequisites and parser checks catch accidental duplicated script bodies.

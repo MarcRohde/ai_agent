@@ -27,12 +27,24 @@ Lessons learned are intentionally committed in git. When work spans this library
 
 This workspace supports all documented Work IQ MCP servers (`mail`, `user`, `calendar`, `teams`, `word`, `copilot`).
 
-To bootstrap on a new machine:
+Primary recovery command (single step):
 
-1. Set `EXO_CLIENT_ID` and `EXO_TENANT_ID`.
-	If you also use `start-outlook-auth-server.ps1`, set `EXO_CLIENT_SECRET` too.
-2. Ensure Azure CLI is logged in (`az login`).
-3. Run one of these:
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\Recover-AiAgentEnvironment.ps1 -ClientAppId '<client-app-id>' -TenantId '<tenant-id>'
+
+# or run without parameters and respond to prompts for missing values
+pwsh -ExecutionPolicy Bypass -File .\Recover-AiAgentEnvironment.ps1
+```
+
+What this one-step recovery script does:
+
+1. Confirms required inputs (`EXO_CLIENT_ID`, optional tenant and secret).
+2. Validates Azure CLI is available and authenticated (runs `az login` if needed).
+3. Ensures Agent 365 CLI (`a365`) is installed.
+4. Runs the standard chained bootstrap flow (`Bootstrap-DevEnvironment.ps1 -BootstrapWorkIQ`).
+5. Syncs `.vscode/mcp.json`, acquires enabled Work IQ tokens, and validates MCP server connectivity.
+
+Advanced/manual options:
 
 ```powershell
 .\tools\scripts\Bootstrap-WorkIQEnvironment.ps1
@@ -54,6 +66,7 @@ ai_agent/
 ├── AGENTS.md              # Primary repository mission file
 ├── CLAUDE.md              # Agent project instructions (read first)
 ├── README.md              # This file
+├── Recover-AiAgentEnvironment.ps1 # One-step machine recovery bootstrap
 ├── skill_library.md       # Master index of all skills
 ├── skills/                # Individual skill definitions
 │   ├── andis_bi_sql_change/
